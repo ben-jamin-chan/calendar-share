@@ -4,7 +4,7 @@ import { Fragment, useState, useEffect } from "react"
 import { Menu, Transition } from "@headlessui/react"
 import { BellIcon, CheckIcon, CalendarIcon, UsersIcon, ClockIcon } from "@heroicons/react/24/outline"
 import { format } from "date-fns"
-import { collection, query, where, orderBy, limit, onSnapshot, doc, updateDoc } from "firebase/firestore"
+import { collection, query, where, onSnapshot, doc, updateDoc } from "firebase/firestore"
 import { db } from "../firebase"
 import { useAuth } from "../contexts/AuthContext"
 
@@ -12,24 +12,51 @@ export default function NotificationsDropdown() {
   const { currentUser } = useAuth()
   const [notifications, setNotifications] = useState([])
   const [unreadCount, setUnreadCount] = useState(0)
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!currentUser) return
 
-    // Query notifications for the current user
+    // Create a simpler query that doesn't require a composite index
     const notificationsRef = collection(db, "notifications")
-    const q = query(notificationsRef, where("userId", "==", currentUser.uid), orderBy("createdAt", "desc"), limit(10))
+    const q = query(
+      notificationsRef,
+      where("userId", "==", currentUser.uid),
+      // Removed the orderBy to avoid requiring a composite index
+    )
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const notificationsData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date(),
-      }))
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        try {
+          const notificationsData = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+            createdAt: doc.data().createdAt?.toDate() || new Date(),
+          }))
 
-      setNotifications(notificationsData)
-      setUnreadCount(notificationsData.filter((n) => !n.read).length)
-    })
+          // Sort client-side instead of using orderBy in the query
+          notificationsData.sort((a, b) => b.createdAt - a.createdAt)
+
+          // Take only the first 10 after sorting
+          const limitedData = notificationsData.slice(0, 10)
+
+          setNotifications(limitedData)
+          setUnreadCount(limitedData.filter((n) => !n.read).length)
+          setLoading(false)
+        } catch (err) {
+          console.error("Error processing notifications:", err)
+          setError(err.message)
+          setLoading(false)
+        }
+      },
+      (err) => {
+        console.error("Error fetching notifications:", err)
+        setError(err.message)
+        setLoading(false)
+      },
+    )
 
     return unsubscribe
   }, [currentUser])
@@ -86,6 +113,39 @@ export default function NotificationsDropdown() {
     return format(date, "MMM d")
   }
 
+  // If there's an error, render a simplified version without the query
+  if (error) {
+    return (
+      <Menu as="div" className="relative">
+        <div>
+          <Menu.Button className="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+            <span className="sr-only">View notifications</span>
+            <BellIcon className="h-6 w-6" aria-hidden="true" />
+          </Menu.Button>
+        </div>
+        <Transition
+          as={Fragment}
+          enter="transition ease-out duration-100"
+          enterFrom="transform opacity-0 scale-95"
+          enterTo="transform opacity-100 scale-100"
+          leave="transition ease-in duration-75"
+          leaveFrom="transform opacity-100 scale-100"
+          leaveTo="transform opacity-0 scale-95"
+        >
+          <Menu.Items className="absolute right-0 z-10 mt-2 w-80 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <div className="px-4 py-6 text-center text-sm text-gray-500">
+              <div className="flex justify-center mb-3">
+                <BellIcon className="h-6 w-6 text-gray-400" />
+              </div>
+              <p>Unable to load notifications</p>
+              <p className="mt-1 text-xs">Please try again later</p>
+            </div>
+          </Menu.Items>
+        </Transition>
+      </Menu>
+    )
+  }
+
   return (
     <Menu as="div" className="relative">
       <div>
@@ -122,7 +182,14 @@ export default function NotificationsDropdown() {
             )}
           </div>
 
-          {notifications.length === 0 ? (
+          {loading ? (
+            <div className="px-4 py-6 text-center text-sm text-gray-500">
+              <div className="flex justify-center mb-3">
+                <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-purple-600"></div>
+              </div>
+              <p>Loading notifications...</p>
+            </div>
+          ) : notifications.length === 0 ? (
             <div className="px-4 py-6 text-center text-sm text-gray-500">
               <div className="flex justify-center mb-3">
                 <BellIcon className="h-6 w-6 text-gray-400" />

@@ -1,0 +1,90 @@
+
+(node:24756) ExperimentalWarning: CommonJS module /Users/benjamin/Desktop/calendar-app/vite.config.js is loading ES Module /Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/index.js using re
+(node:24756) ExperimentalWarning: CommonJS module /Users/benjamin/Desktop/calendar-app/vite.config.js is loading ES Module /Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/index.js using require().
+Support for loading ES Module in require() is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+  VITE v6.2.6  ready in 203 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+12:58:58 PM [vite] (client) hmr update /src/components/NotificationsDropdown.jsx, /src/index.css
+12:59:05 PM [vite] (client) hmr update /src/index.css, /src/pages/Calendar.jsx, /src/components/EventModal.jsx
+12:59:11 PM [vite] (client) hmr update /src/components/Navbar.jsx, /src/index.css
+12:59:11 PM [vite] Internal server error: Failed to resolve import "react-error-boundary" from "src/components/Navbar.jsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/benjamin/Desktop/calendar-app/src/components/Navbar.jsx:7:30
+  21 |  import { useAuth } from "../contexts/AuthContext";
+  22 |  import { MagnifyingGlassIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+  23 |  import { ErrorBoundary } from "react-error-boundary";
+     |                                 ^
+  24 |  import NotificationsDropdown from "./NotificationsDropdown";
+  25 |  function NotificationErrorFallback() {
+      at TransformPluginContext._formatLog (file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:47897:41)
+      at TransformPluginContext.error (file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:47894:16)
+      at normalizeUrl (file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:46027:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:46146:37
+      at async Promise.all (index 7)
+      at async TransformPluginContext.transform (file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:46073:7)
+      at async EnvironmentPluginContainer.transform (file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:47692:18)
+      at async loadAndTransform (file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:41327:27)
+      at async viteTransformMiddleware (file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:42807:24)
+12:59:17 PM [vite] (client) Pre-transform error: Failed to resolve import "react-error-boundary" from "src/components/Navbar.jsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/benjamin/Desktop/calendar-app/src/components/Navbar.jsx:7:30
+  21 |  import { useAuth } from "../contexts/AuthContext";
+  22 |  import { MagnifyingGlassIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+  23 |  import { ErrorBoundary } from "react-error-boundary";
+     |                                 ^
+  24 |  import NotificationsDropdown from "./NotificationsDropdown";
+  25 |  function NotificationErrorFallback() {
+12:59:17 PM [vite] (client) Pre-transform error: Failed to resolve import "react-error-boundary" from "src/components/Navbar.jsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/benjamin/Desktop/calendar-app/src/components/Navbar.jsx:7:30
+  21 |  import { useAuth } from "../contexts/AuthContext";
+  22 |  import { MagnifyingGlassIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+  23 |  import { ErrorBoundary } from "react-error-boundary";
+     |                                 ^
+  24 |  import NotificationsDropdown from "./NotificationsDropdown";
+  25 |  function NotificationErrorFallback() { (x2)
+12:59:17 PM [vite] (client) Pre-transform error: Failed to resolve import "react-error-boundary" from "src/components/Navbar.jsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/benjamin/Desktop/calendar-app/src/components/Navbar.jsx:7:30
+  21 |  import { useAuth } from "../contexts/AuthContext";
+  22 |  import { MagnifyingGlassIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+  23 |  import { ErrorBoundary } from "react-error-boundary";
+     |                                 ^
+  24 |  import NotificationsDropdown from "./NotificationsDropdown";
+  25 |  function NotificationErrorFallback() { (x3)
+12:59:17 PM [vite] Internal server error: Failed to resolve import "react-error-boundary" from "src/components/Navbar.jsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/benjamin/Desktop/calendar-app/src/components/Navbar.jsx:7:30
+  21 |  import { useAuth } from "../contexts/AuthContext";
+  22 |  import { MagnifyingGlassIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+  23 |  import { ErrorBoundary } from "react-error-boundary";
+     |                                 ^
+  24 |  import NotificationsDropdown from "./NotificationsDropdown";
+  25 |  function NotificationErrorFallback() {
+      at TransformPluginContext._formatLog (file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:47897:41)
+      at TransformPluginContext.error (file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:47894:16)
+      at normalizeUrl (file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:46027:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:46146:37
+      at async Promise.all (index 7)
+      at async TransformPluginContext.transform (file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:46073:7)
+      at async EnvironmentPluginContainer.transform (file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:47692:18)
+      at async loadAndTransform (file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:41327:27)
+      at async viteTransformMiddleware (file:///Users/benjamin/Desktop/calendar-app/node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js:42807:24)
+benjamin@Benjamins-MacBook calendar-app % git push -u origin main
+Enumerating objects: 16248, done.
+Counting objects: 100% (16248/16248), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (8753/8753), done.
+Writing objects: 100% (16247/16247), 41.07 MiB | 532.40 MiB/s, done.
+Total 16247 (delta 7081), reused 16247 (delta 7081), pack-reused 0
+remote: Resolving deltas: 100% (7081/7081), done.
+To https://github.com/ben-jamin-chan/calendar-share.git
+   fc83282..08fe5d2  main -> main
+branch 'main' set up to track 'origin/main'.npm install react-error-boundary

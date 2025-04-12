@@ -44,6 +44,8 @@ export default function Calendar() {
   const { currentUser } = useAuth()
   const isMobile = useMediaQuery("(max-width: 768px)")
 
+  
+
   useEffect(() => {
     if (!currentUser) return
 
