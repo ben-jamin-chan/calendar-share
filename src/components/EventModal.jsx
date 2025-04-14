@@ -1,15 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { format } from "date-fns"
-import { collection, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore"
+import { collection, addDoc, updateDoc, doc, deleteDoc, query, where, getDocs } from "firebase/firestore"
 import { db } from "../firebase"
 import { useAuth } from "../contexts/AuthContext"
 import { XMarkIcon, ClockIcon, MapPinIcon, CalendarIcon, UserIcon, PencilIcon } from "@heroicons/react/24/outline"
 import toast from "react-hot-toast"
 import { createNewEventNotification, createSharedCalendarNotification } from "../services/notificationService"
+import { getUserCalendars } from "../services/calendarService"
 
-export default function EventModal({ isOpen, onClose, selectedDate, event = null }) {
+export default function EventModal({ isOpen, onClose, selectedDate, event = null, initialCalendarId = null }) {
   const { currentUser } = useAuth()
   const [title, setTitle] = useState(event?.title || "")
   const [description, setDescription] = useState(event?.description || "")
@@ -26,6 +27,9 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
   const [isShared, setIsShared] = useState(event?.isShared || false)
   const [sharedWith, setSharedWith] = useState(event?.sharedWith || [])
   const [sharedEmail, setSharedEmail] = useState("")
+  const [calendarId, setCalendarId] = useState(event?.calendarId || initialCalendarId || "")
+  const [calendars, setCalendars] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const colorOptions = [
     { name: "Indigo", value: "#6366f1" },
@@ -36,6 +40,58 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
     { name: "Pink", value: "#ec4899" },
     { name: "Purple", value: "#8b5cf6" },
   ]
+
+  useEffect(() => {
+    const fetchCalendars = async () => {
+      if (!currentUser) return
+
+      try {
+        // Get user's own calendars
+        const userCalendars = await getUserCalendars(currentUser.uid)
+
+        // Get calendars shared with the user
+        const sharedCalendarsRef = collection(db, "calendars")
+        const sharedQuery = query(sharedCalendarsRef, where("sharedEmails", "array-contains", currentUser.email))
+        const sharedSnapshot = await getDocs(sharedQuery)
+
+        const sharedCalendars = sharedSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate() || new Date(),
+          updatedAt: doc.data().updatedAt?.toDate() || new Date(),
+        }))
+
+        // Combine user's calendars and shared calendars
+        const allCalendars = [...userCalendars, ...sharedCalendars]
+
+        setCalendars(allCalendars)
+
+        // If no calendar is selected and we have calendars, select the default one
+        if (!calendarId && allCalendars.length > 0) {
+          // If initialCalendarId is provided, use that
+          if (initialCalendarId) {
+            setCalendarId(initialCalendarId)
+            const selectedCal = allCalendars.find((cal) => cal.id === initialCalendarId)
+            if (selectedCal) {
+              setColor(selectedCal.color)
+            }
+          } else {
+            // Otherwise use the default calendar
+            const defaultCalendar = allCalendars.find((cal) => cal.isDefault) || allCalendars[0]
+            setCalendarId(defaultCalendar.id)
+            setColor(defaultCalendar.color)
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching calendars:", error)
+        toast.error("Failed to load calendars")
+      }
+    }
+
+    if (isOpen) {
+      fetchCalendars()
+    }
+  }, [currentUser, isOpen, calendarId, initialCalendarId])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -49,14 +105,22 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
         return
       }
 
+      if (!calendarId) {
+        toast.error("Please select a calendar")
+        return
+      }
+
+      setLoading(true)
+
       const eventData = {
         title,
         description,
         location,
-        start: new Date(`${startDate}T${startTime}`),
-        end: new Date(`${endDate}T${endTime}`),
+        start,
+        end,
         color,
         userId: currentUser.uid,
+        calendarId,
         isShared,
         sharedWith,
         createdAt: new Date(),
@@ -72,21 +136,27 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
 
         // Create notification for the event creator
         await createNewEventNotification(
+          currentUser.uid,
           {
             ...eventData,
             id: docRef.id,
           },
-          currentUser.uid,
+          currentUser.displayName || currentUser.email,
         )
 
         // Create notifications for shared users
         if (isShared && sharedWith.length > 0) {
-          const calendarName = "Personal" // Default calendar name
+          const calendar = calendars.find((cal) => cal.id === calendarId)
+          const calendarName = calendar ? calendar.name : "Calendar"
 
           for (const email of sharedWith) {
             // In a real app, you would query the user by email to get their ID
             // For now, we'll just use the email as a placeholder
-            await createSharedCalendarNotification(currentUser.displayName || currentUser.email, email, calendarName)
+            await createSharedCalendarNotification(
+              email, // This should be the user ID in a real app
+              currentUser.displayName || currentUser.email,
+              calendarName,
+            )
           }
         }
 
@@ -97,6 +167,8 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
     } catch (error) {
       console.error("Error saving event:", error)
       toast.error("Failed to save event")
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -121,6 +193,17 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
 
   const removeSharedUser = (email) => {
     setSharedWith(sharedWith.filter((e) => e !== email))
+  }
+
+  const handleCalendarChange = (e) => {
+    const selectedCalendarId = e.target.value
+    setCalendarId(selectedCalendarId)
+
+    // Update color to match the selected calendar
+    const selectedCalendar = calendars.find((cal) => cal.id === selectedCalendarId)
+    if (selectedCalendar) {
+      setColor(selectedCalendar.color)
+    }
   }
 
   if (!isOpen) return null
@@ -159,6 +242,29 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                         />
                       </div>
                       <div className="mt-1 border-b border-gray-200 pb-2"></div>
+                    </div>
+
+                    <div className="flex items-start">
+                      <CalendarIcon className="h-5 w-5 text-gray-400 mr-2 mt-1" />
+                      <div className="w-full">
+                        <label htmlFor="calendar" className="block text-sm font-medium text-gray-700">
+                          Calendar
+                        </label>
+                        <select
+                          id="calendar"
+                          value={calendarId}
+                          onChange={handleCalendarChange}
+                          required
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                        >
+                          <option value="">Select a calendar</option>
+                          {calendars.map((calendar) => (
+                            <option key={calendar.id} value={calendar.id}>
+                              {calendar.name} {calendar.ownerId !== currentUser.uid ? "(Shared)" : ""}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                     </div>
 
                     <div className="flex items-start">
@@ -351,16 +457,18 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
             <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
               <button
                 type="submit"
-                className="inline-flex w-full justify-center rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 sm:ml-3 sm:w-auto"
+                disabled={loading}
+                className="inline-flex w-full justify-center rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 sm:ml-3 sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {event ? "Update" : "Save"}
+                {loading ? "Saving..." : event ? "Update" : "Save"}
               </button>
 
               {event && (
                 <button
                   type="button"
                   onClick={handleDelete}
-                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-red-600 shadow-sm ring-1 ring-inset ring-red-300 hover:bg-red-50 sm:mt-0 sm:w-auto"
+                  disabled={loading}
+                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-red-600 shadow-sm ring-1 ring-inset ring-red-300 hover:bg-red-50 sm:mt-0 sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Delete
                 </button>

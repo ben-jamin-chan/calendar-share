@@ -22,7 +22,7 @@ import {
   isWithinInterval,
   isAfter,
 } from "date-fns"
-import { collection, query, where, onSnapshot } from "firebase/firestore"
+import { collection, query, where, onSnapshot, getDocs, doc, getDoc } from "firebase/firestore"
 import { db } from "../firebase"
 import { useAuth } from "../contexts/AuthContext"
 import Navbar from "../components/Navbar"
@@ -32,6 +32,7 @@ import CalendarHeader from "../components/CalendarHeader"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { useMediaQuery } from "../hooks/useMediaQuery"
 import { createEventReminderNotification } from "../services/notificationService"
+import { getUserCalendars } from "../services/calendarService"
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -41,17 +42,64 @@ export default function Calendar() {
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [view, setView] = useState("month") // 'month', 'week', 'day'
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
+  const [calendars, setCalendars] = useState([])
+  const [sharedCalendars, setSharedCalendars] = useState([])
+  const [selectedCalendars, setSelectedCalendars] = useState([])
   const { currentUser } = useAuth()
   const isMobile = useMediaQuery("(max-width: 768px)")
 
-  
+  // Create a function to handle creating a new event
+  const handleCreateEvent = () => {
+    setSelectedDate(new Date())
+    setSelectedEvent(null)
+    setIsModalOpen(true)
+  }
 
+  // Fetch user calendars and shared calendars
   useEffect(() => {
     if (!currentUser) return
 
-    // Query events for the current user
+    const fetchAllCalendars = async () => {
+      try {
+        // Get user's own calendars
+        const userCalendars = await getUserCalendars(currentUser.uid)
+        setCalendars(userCalendars)
+
+        // Get calendars shared with the user
+        const sharedCalendarsRef = collection(db, "calendars")
+        const sharedQuery = query(sharedCalendarsRef, where("sharedEmails", "array-contains", currentUser.email))
+        const sharedSnapshot = await getDocs(sharedQuery)
+
+        const sharedCalendarsData = sharedSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate() || new Date(),
+          updatedAt: doc.data().updatedAt?.toDate() || new Date(),
+        }))
+
+        setSharedCalendars(sharedCalendarsData)
+
+        // Select all calendars by default (both owned and shared)
+        const allCalendarIds = [...userCalendars, ...sharedCalendarsData].map((cal) => cal.id)
+        setSelectedCalendars(allCalendarIds)
+      } catch (error) {
+        console.error("Error fetching calendars:", error)
+      }
+    }
+
+    fetchAllCalendars()
+  }, [currentUser])
+
+  // Fetch events for selected calendars
+  useEffect(() => {
+    if (!currentUser || selectedCalendars.length === 0) {
+      setEvents([])
+      return
+    }
+
+    // Query events for the selected calendars
     const eventsRef = collection(db, "events")
-    const q = query(eventsRef, where("userId", "==", currentUser.uid))
+    const q = query(eventsRef, where("calendarId", "in", selectedCalendars))
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const eventsData = snapshot.docs.map((doc) => ({
@@ -60,6 +108,7 @@ export default function Calendar() {
         start: doc.data().start.toDate(),
         end: doc.data().end.toDate(),
       }))
+
       setEvents(eventsData)
 
       // Check for upcoming events and create reminders
@@ -71,7 +120,7 @@ export default function Calendar() {
         if (isBefore(event.start, thirtyMinutesFromNow) && isBefore(now, event.start)) {
           // In a real app, you'd check if a reminder has already been sent
           // For demo purposes, we'll create a notification
-          createEventReminderNotification(event, currentUser.uid).catch((err) =>
+          createEventReminderNotification(currentUser.uid, event, 30).catch((err) =>
             console.error("Error creating reminder notification:", err),
           )
         }
@@ -79,7 +128,57 @@ export default function Calendar() {
     })
 
     return unsubscribe
-  }, [currentUser])
+  }, [currentUser, selectedCalendars])
+
+  // Listen for the custom event from the search function
+  useEffect(() => {
+    const handleFocusEvent = async (e) => {
+      const { date, eventId } = e.detail
+
+      // Set the current date to the event date
+      setCurrentDate(date)
+
+      // Determine the appropriate view based on the event
+      // For simplicity, we'll just use day view
+      setView("day")
+
+      // Get the event details and set it as selected
+      if (eventId) {
+        try {
+          const eventDoc = await getDoc(doc(db, "events", eventId))
+          if (eventDoc.exists()) {
+            const eventData = eventDoc.data()
+            setSelectedEvent({
+              id: eventId,
+              ...eventData,
+              start: eventData.start.toDate(),
+              end: eventData.end.toDate(),
+            })
+            setSelectedDate(eventData.start.toDate())
+            setIsModalOpen(true)
+          }
+        } catch (error) {
+          console.error("Error fetching event details:", error)
+        }
+      }
+    }
+
+    window.addEventListener("focusCalendarEvent", handleFocusEvent)
+
+    return () => {
+      window.removeEventListener("focusCalendarEvent", handleFocusEvent)
+    }
+  }, [])
+
+  const handleCalendarToggle = (calendar) => {
+    setSelectedCalendars((prev) => {
+      if (prev.includes(calendar.id)) {
+        return prev.filter((id) => id !== calendar.id)
+      } else {
+        return [...prev, calendar.id]
+      }
+    })
+  }
 
   const nextMonth = () => setCurrentDate(addMonths(currentDate, 1))
   const prevMonth = () => setCurrentDate(subMonths(currentDate, 1))
@@ -103,8 +202,13 @@ export default function Calendar() {
     setIsModalOpen(true)
   }
 
-  const toggleMobileSidebar = () => {
-    setMobileSidebarOpen(!mobileSidebarOpen)
+  // Update the toggleMobileSidebar function and how it's passed to the Sidebar component
+  const toggleMobileSidebar = (value) => {
+    if (typeof value === "boolean") {
+      setMobileSidebarOpen(value)
+    } else {
+      setMobileSidebarOpen(!mobileSidebarOpen)
+    }
   }
 
   // Get events for a specific day, including multi-day events
@@ -425,11 +529,17 @@ export default function Calendar() {
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar - hidden by default on mobile */}
-      <Sidebar isMobile={isMobile} toggleMobileSidebar={mobileSidebarOpen} />
+      <Sidebar
+        isMobile={isMobile}
+        toggleMobileSidebar={mobileSidebarOpen}
+        onCreateEvent={handleCreateEvent}
+        selectedCalendars={selectedCalendars}
+        onCalendarToggle={handleCalendarToggle}
+      />
 
       {/* Mobile sidebar backdrop */}
       {isMobile && mobileSidebarOpen && (
-        <div className="fixed inset-0 z-30 bg-gray-600 bg-opacity-75" onClick={toggleMobileSidebar}></div>
+        <div className="fixed inset-0 z-30 bg-gray-600 bg-opacity-75" onClick={() => toggleMobileSidebar(false)}></div>
       )}
 
       {/* Main content - takes full width on mobile when sidebar is closed */}
@@ -455,11 +565,7 @@ export default function Calendar() {
 
         {/* Floating action button - adjusted for better mobile visibility */}
         <button
-          onClick={() => {
-            setSelectedDate(new Date())
-            setSelectedEvent(null)
-            setIsModalOpen(true)
-          }}
+          onClick={handleCreateEvent}
           className="fixed right-4 bottom-16 sm:bottom-6 p-3 rounded-full bg-purple-600 text-white shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 z-20"
           aria-label="Add new event"
         >

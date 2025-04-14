@@ -9,6 +9,7 @@ import {
   updateProfile,
 } from "firebase/auth"
 import { auth } from "../firebase"
+import { createDefaultCalendar } from "../services/calendarService"
 
 const AuthContext = createContext()
 
@@ -22,7 +23,11 @@ export function AuthProvider({ children }) {
 
   function signup(email, password, displayName) {
     return createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-      return updateProfile(userCredential.user, { displayName })
+      // First update the profile with the display name
+      return updateProfile(userCredential.user, { displayName }).then(() => {
+        // Then create a default calendar for the new user
+        return createDefaultCalendar(userCredential.user.uid, displayName || email)
+      })
     })
   }
 
