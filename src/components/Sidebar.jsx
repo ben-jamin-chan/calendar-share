@@ -112,15 +112,15 @@ export default function Sidebar({
           isMobile
             ? "fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out w-64"
             : "hidden md:flex md:flex-col md:w-64 md:fixed md:inset-y-0"
-        } ${isMobile && !toggleMobileSidebar ? "-translate-x-full" : "translate-x-0"} bg-white border-r border-gray-200`}
+        } ${isMobile && !toggleMobileSidebar ? "-translate-x-full" : "translate-x-0"} bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700`}
       >
         <div className="flex-1 flex flex-col min-h-0 overflow-y-auto">
-          <div className="flex items-center justify-between h-16 flex-shrink-0 px-4 border-b border-gray-200">
-            <h1 className="text-xl font-bold text-purple-700">CalendarShare</h1>
+          <div className="flex items-center justify-between h-16 flex-shrink-0 px-4 border-b border-gray-200 dark:border-gray-700">
+            <h1 className="text-xl font-bold text-purple-700 dark:text-purple-400">CalendarShare</h1>
             {isMobile && (
               <button
                 onClick={() => toggleMobileSidebar(false)}
-                className="p-2 rounded-md text-gray-500 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500"
+                className="p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500"
               >
                 <XMarkIcon className="h-6 w-6" aria-hidden="true" />
               </button>
@@ -131,7 +131,7 @@ export default function Sidebar({
           <div className="p-4">
             <button
               onClick={handleCreateClick}
-              className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+              className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-offset-gray-800"
             >
               <PlusIcon className="h-5 w-5 mr-2" />
               Create
@@ -146,13 +146,17 @@ export default function Sidebar({
                   key={item.name}
                   to={item.href}
                   className={`${
-                    isActive ? "bg-purple-50 text-purple-700" : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                    isActive
+                      ? "bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
                   } group flex items-center px-2 py-2 text-sm font-medium rounded-md`}
                   onClick={isMobile ? () => toggleMobileSidebar(false) : undefined}
                 >
                   <item.icon
                     className={`${
-                      isActive ? "text-purple-600" : "text-gray-500 group-hover:text-gray-600"
+                      isActive
+                        ? "text-purple-600 dark:text-purple-400"
+                        : "text-gray-500 dark:text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"
                     } mr-3 flex-shrink-0 h-5 w-5`}
                   />
                   {item.name}
@@ -164,14 +168,14 @@ export default function Sidebar({
           {/* My Calendars */}
           <div className="px-3 mt-2">
             <div
-              className="flex items-center justify-between py-2 text-sm font-medium text-gray-600 cursor-pointer"
+              className="flex items-center justify-between py-2 text-sm font-medium text-gray-600 dark:text-gray-300 cursor-pointer"
               onClick={() => setMyCalendarsOpen(!myCalendarsOpen)}
             >
               <span>My calendars</span>
               {myCalendarsOpen ? (
-                <ChevronDownIcon className="h-4 w-4 text-gray-500" />
+                <ChevronDownIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               ) : (
-                <ChevronRightIcon className="h-4 w-4 text-gray-500" />
+                <ChevronRightIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               )}
             </div>
 
@@ -180,16 +184,16 @@ export default function Sidebar({
                 {loading ? (
                   <div className="py-2 px-1">
                     <div className="animate-pulse flex space-x-2 items-center">
-                      <div className="h-3 w-3 bg-gray-200 rounded-full"></div>
-                      <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-3 w-3 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
                     </div>
                   </div>
                 ) : calendars.length === 0 ? (
                   <div className="py-2 px-1">
-                    <div className="text-sm text-gray-500 mb-2">No calendars found</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">No calendars found</div>
                     <button
                       onClick={() => setIsManageCalendarsModalOpen(true)}
-                      className="flex items-center text-sm text-purple-600 hover:text-purple-800"
+                      className="flex items-center text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300"
                     >
                       <PlusIcon className="h-4 w-4 mr-1" />
                       Create calendar
@@ -203,12 +207,14 @@ export default function Sidebar({
                         id={`calendar-${calendar.id}`}
                         checked={selectedCalendars.includes(calendar.id)}
                         onChange={() => handleCalendarToggle(calendar)}
-                        className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                        className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 dark:border-gray-600 rounded"
                       />
                       <div className="flex items-center ml-2 flex-1">
                         <span className="h-3 w-3 rounded-full mr-2" style={{ backgroundColor: calendar.color }}></span>
-                        <span className="text-sm text-gray-700">{calendar.name}</span>
-                        {calendar.isDefault && <span className="ml-1 text-xs text-gray-500">(Default)</span>}
+                        <span className="text-sm text-gray-700 dark:text-gray-300">{calendar.name}</span>
+                        {calendar.isDefault && (
+                          <span className="ml-1 text-xs text-gray-500 dark:text-gray-400">(Default)</span>
+                        )}
                       </div>
                     </div>
                   ))
@@ -216,7 +222,7 @@ export default function Sidebar({
 
                 <button
                   onClick={() => setIsManageCalendarsModalOpen(true)}
-                  className="flex items-center text-sm text-purple-600 hover:text-purple-800 mt-2"
+                  className="flex items-center text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 mt-2"
                 >
                   <PlusIcon className="h-4 w-4 mr-1" />
                   Manage calendars
@@ -228,14 +234,14 @@ export default function Sidebar({
           {/* Shared Calendars Section */}
           <div className="px-3 mt-2">
             <div
-              className="flex items-center justify-between py-2 text-sm font-medium text-gray-600 cursor-pointer"
+              className="flex items-center justify-between py-2 text-sm font-medium text-gray-600 dark:text-gray-300 cursor-pointer"
               onClick={() => setSharedCalendarsOpen(!sharedCalendarsOpen)}
             >
               <span>Shared calendars</span>
               {sharedCalendarsOpen ? (
-                <ChevronDownIcon className="h-4 w-4 text-gray-500" />
+                <ChevronDownIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               ) : (
-                <ChevronRightIcon className="h-4 w-4 text-gray-500" />
+                <ChevronRightIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               )}
             </div>
 
@@ -244,16 +250,16 @@ export default function Sidebar({
                 {sharedLoading ? (
                   <div className="py-2 px-1">
                     <div className="animate-pulse flex space-x-2 items-center">
-                      <div className="h-3 w-3 bg-gray-200 rounded-full"></div>
-                      <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-3 w-3 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
                     </div>
                   </div>
                 ) : sharedCalendars.length === 0 ? (
                   <div className="py-2 px-1">
-                    <div className="text-sm text-gray-500 mb-2">No shared calendars</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">No shared calendars</div>
                     <Link
                       to="/shared"
-                      className="flex items-center text-sm text-purple-600 hover:text-purple-800"
+                      className="flex items-center text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300"
                       onClick={isMobile ? () => toggleMobileSidebar(false) : undefined}
                     >
                       <UsersIcon className="h-4 w-4 mr-1" />
@@ -268,12 +274,12 @@ export default function Sidebar({
                         id={`shared-calendar-${calendar.id}`}
                         checked={selectedCalendars.includes(calendar.id)}
                         onChange={() => handleCalendarToggle(calendar)}
-                        className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                        className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 dark:border-gray-600 rounded"
                       />
                       <div className="flex items-center ml-2 flex-1">
                         <span className="h-3 w-3 rounded-full mr-2" style={{ backgroundColor: calendar.color }}></span>
-                        <span className="text-sm text-gray-700">{calendar.name}</span>
-                        <span className="ml-1 text-xs text-gray-500">(Shared)</span>
+                        <span className="text-sm text-gray-700 dark:text-gray-300">{calendar.name}</span>
+                        <span className="ml-1 text-xs text-gray-500 dark:text-gray-400">(Shared)</span>
                       </div>
                     </div>
                   ))
@@ -281,7 +287,7 @@ export default function Sidebar({
 
                 <Link
                   to="/shared"
-                  className="flex items-center text-sm text-purple-600 hover:text-purple-800 mt-2"
+                  className="flex items-center text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 mt-2"
                   onClick={isMobile ? () => toggleMobileSidebar(false) : undefined}
                 >
                   <UsersIcon className="h-4 w-4 mr-1" />
@@ -291,16 +297,18 @@ export default function Sidebar({
             )}
           </div>
 
-          <div className="p-4 border-t border-gray-200 mt-auto">
+          <div className="p-4 border-t border-gray-200 dark:border-gray-700 mt-auto">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="h-9 w-9 rounded-full bg-purple-100 flex items-center justify-center text-purple-600">
+                <div className="h-9 w-9 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-600 dark:text-purple-300">
                   {currentUser?.displayName?.charAt(0) || currentUser?.email?.charAt(0) || "U"}
                 </div>
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-gray-700">{currentUser?.displayName || "User"}</p>
-                <p className="text-xs text-gray-500 truncate max-w-[160px]">{currentUser?.email}</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {currentUser?.displayName || "User"}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[160px]">{currentUser?.email}</p>
               </div>
             </div>
           </div>

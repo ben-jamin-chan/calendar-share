@@ -211,11 +211,11 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-75 transition-opacity">
       <div className="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-        <div className="inline-block transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle">
+        <div className="inline-block transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle">
           <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
             <button
               type="button"
-              className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+              className="rounded-md bg-white dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
               onClick={onClose}
             >
               <span className="sr-only">Close</span>
@@ -224,13 +224,13 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
           </div>
 
           <form onSubmit={handleSubmit}>
-            <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div className="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
               <div className="sm:flex sm:items-start">
                 <div className="mt-3 w-full text-center sm:ml-4 sm:mt-0 sm:text-left">
                   <div className="mt-2 space-y-4">
                     <div>
                       <div className="flex items-center">
-                        <PencilIcon className="h-5 w-5 text-gray-400 mr-2" />
+                        <PencilIcon className="h-5 w-5 text-gray-400 dark:text-gray-500 mr-2" />
                         <input
                           type="text"
                           id="title"
@@ -238,16 +238,19 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                           onChange={(e) => setTitle(e.target.value)}
                           placeholder="Add title"
                           required
-                          className="block w-full border-0 p-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-lg font-semibold"
+                          className="block w-full border-0 p-0 text-gray-900 dark:text-white bg-transparent placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-0 sm:text-lg font-semibold"
                         />
                       </div>
-                      <div className="mt-1 border-b border-gray-200 pb-2"></div>
+                      <div className="mt-1 border-b border-gray-200 dark:border-gray-700 pb-2"></div>
                     </div>
 
                     <div className="flex items-start">
                       <CalendarIcon className="h-5 w-5 text-gray-400 mr-2 mt-1" />
                       <div className="w-full">
-                        <label htmlFor="calendar" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="calendar"
+                          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                        >
                           Calendar
                         </label>
                         <select
@@ -255,7 +258,7 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                           value={calendarId}
                           onChange={handleCalendarChange}
                           required
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                          className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-purple-500 dark:focus:border-purple-400 focus:ring-purple-500 dark:focus:ring-purple-400 sm:text-sm"
                         >
                           <option value="">Select a calendar</option>
                           {calendars.map((calendar) => (
@@ -271,7 +274,10 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                       <CalendarIcon className="h-5 w-5 text-gray-400 mr-2 mt-1" />
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
                         <div>
-                          <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">
+                          <label
+                            htmlFor="startDate"
+                            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                          >
                             Start Date
                           </label>
                           <input
@@ -280,11 +286,14 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
                             required
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                            className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-purple-500 dark:focus:border-purple-400 focus:ring-purple-500 dark:focus:ring-purple-400 sm:text-sm"
                           />
                         </div>
                         <div>
-                          <label htmlFor="startTime" className="block text-sm font-medium text-gray-700">
+                          <label
+                            htmlFor="startTime"
+                            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                          >
                             Start Time
                           </label>
                           <input
@@ -293,7 +302,7 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                             value={startTime}
                             onChange={(e) => setStartTime(e.target.value)}
                             required
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                            className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-purple-500 dark:focus:border-purple-400 focus:ring-purple-500 dark:focus:ring-purple-400 sm:text-sm"
                           />
                         </div>
                       </div>
@@ -303,7 +312,10 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                       <ClockIcon className="h-5 w-5 text-gray-400 mr-2 mt-1" />
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
                         <div>
-                          <label htmlFor="endDate" className="block text-sm font-medium text-gray-700">
+                          <label
+                            htmlFor="endDate"
+                            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                          >
                             End Date
                           </label>
                           <input
@@ -312,11 +324,14 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                             value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
                             required
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                            className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-purple-500 dark:focus:border-purple-400 focus:ring-purple-500 dark:focus:ring-purple-400 sm:text-sm"
                           />
                         </div>
                         <div>
-                          <label htmlFor="endTime" className="block text-sm font-medium text-gray-700">
+                          <label
+                            htmlFor="endTime"
+                            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                          >
                             End Time
                           </label>
                           <input
@@ -325,7 +340,7 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                             value={endTime}
                             onChange={(e) => setEndTime(e.target.value)}
                             required
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                            className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-purple-500 dark:focus:border-purple-400 focus:ring-purple-500 dark:focus:ring-purple-400 sm:text-sm"
                           />
                         </div>
                       </div>
@@ -334,7 +349,10 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                     <div className="flex items-start">
                       <MapPinIcon className="h-5 w-5 text-gray-400 mr-2 mt-1" />
                       <div className="w-full">
-                        <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="location"
+                          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                        >
                           Location
                         </label>
                         <input
@@ -343,7 +361,7 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                           value={location}
                           onChange={(e) => setLocation(e.target.value)}
                           placeholder="Add location"
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                          className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-purple-500 dark:focus:border-purple-400 focus:ring-purple-500 dark:focus:ring-purple-400 sm:text-sm"
                         />
                       </div>
                     </div>
@@ -353,7 +371,7 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                         <span className="h-3 w-3 rounded-full" style={{ backgroundColor: color }}></span>
                       </div>
                       <div className="w-full">
-                        <label htmlFor="color" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="color" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                           Color
                         </label>
                         <div className="mt-1 flex space-x-2">
@@ -375,7 +393,10 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
 
                     <div className="flex items-start">
                       <div className="w-full">
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="description"
+                          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                        >
                           Description
                         </label>
                         <textarea
@@ -384,7 +405,7 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                           onChange={(e) => setDescription(e.target.value)}
                           rows="3"
                           placeholder="Add description"
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                          className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-purple-500 dark:focus:border-purple-400 focus:ring-purple-500 dark:focus:ring-purple-400 sm:text-sm"
                         ></textarea>
                       </div>
                     </div>
@@ -400,7 +421,7 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                             onChange={(e) => setIsShared(e.target.checked)}
                             className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
                           />
-                          <label htmlFor="isShared" className="ml-2 block text-sm text-gray-900">
+                          <label htmlFor="isShared" className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
                             Share this event
                           </label>
                         </div>
@@ -413,12 +434,12 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                                 value={sharedEmail}
                                 onChange={(e) => setSharedEmail(e.target.value)}
                                 placeholder="Enter email to share with"
-                                className="flex-1 rounded-l-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                                className="flex-1 rounded-l-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-purple-500 dark:focus:border-purple-400 focus:ring-purple-500 dark:focus:ring-purple-400 sm:text-sm"
                               />
                               <button
                                 type="button"
                                 onClick={addSharedUser}
-                                className="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 text-gray-700 sm:text-sm"
+                                className="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 dark:border-gray-600 rounded-r-md bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 sm:text-sm"
                               >
                                 Add
                               </button>
@@ -426,7 +447,7 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
 
                             {sharedWith.length > 0 && (
                               <div className="mt-2">
-                                <p className="text-sm font-medium text-gray-700">Shared with:</p>
+                                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Shared with:</p>
                                 <div className="mt-1 flex flex-wrap gap-2">
                                   {sharedWith.map((email) => (
                                     <div
@@ -454,11 +475,11 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                 </div>
               </div>
             </div>
-            <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+            <div className="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex w-full justify-center rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 sm:ml-3 sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex w-full justify-center rounded-md bg-purple-600 dark:bg-purple-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 dark:hover:bg-purple-600 sm:ml-3 sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? "Saving..." : event ? "Update" : "Save"}
               </button>
@@ -468,7 +489,7 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
                   type="button"
                   onClick={handleDelete}
                   disabled={loading}
-                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-red-600 shadow-sm ring-1 ring-inset ring-red-300 hover:bg-red-50 sm:mt-0 sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-red-600 dark:text-red-400 shadow-sm ring-1 ring-inset ring-red-300 dark:ring-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 sm:mt-0 sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Delete
                 </button>
@@ -477,7 +498,7 @@ export default function EventModal({ isOpen, onClose, selectedDate, event = null
               <button
                 type="button"
                 onClick={onClose}
-                className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                className="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 sm:mt-0 sm:w-auto"
               >
                 Cancel
               </button>

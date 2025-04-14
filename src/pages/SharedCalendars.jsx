@@ -133,7 +133,7 @@ export default function SharedCalendars() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar isMobile={isMobile} toggleMobileSidebar={mobileSidebarOpen} onCreateEvent={navigateToCalendar} />
 
       {/* Mobile sidebar backdrop */}
@@ -144,49 +144,55 @@ export default function SharedCalendars() {
       <div className="flex-1 flex flex-col overflow-hidden md:ml-64">
         <Navbar toggleMobileSidebar={toggleMobileSidebar} />
 
-        <main className="flex-1 overflow-y-auto p-4">
+        <main className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
           <div className="max-w-7xl mx-auto">
-            <h1 className="text-2xl font-semibold text-gray-900 mb-6">Shared Calendars</h1>
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Shared Calendars</h1>
 
             {loading ? (
-              <div className="bg-white shadow rounded-lg p-6 text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-purple-600 mx-auto"></div>
-                <p className="mt-4 text-gray-600">Loading shared calendars...</p>
+              <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-purple-600 dark:border-purple-400 mx-auto"></div>
+                <p className="mt-4 text-gray-600 dark:text-gray-400">Loading shared calendars...</p>
               </div>
             ) : sharedCalendars.length === 0 ? (
-              <div className="bg-white shadow rounded-lg p-6 text-center">
-                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-purple-100">
-                  <CalendarIcon className="h-6 w-6 text-purple-600" aria-hidden="true" />
+              <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 text-center">
+                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-purple-100 dark:bg-purple-900/30">
+                  <CalendarIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" aria-hidden="true" />
                 </div>
-                <h3 className="mt-3 text-lg font-medium text-gray-900">No shared calendars found</h3>
-                <p className="mt-2 text-sm text-gray-500">
+                <h3 className="mt-3 text-lg font-medium text-gray-900 dark:text-white">No shared calendars found</h3>
+                <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                   When someone shares their calendar with you, it will appear here.
                 </p>
               </div>
             ) : (
               <>
                 {/* Shared Calendars Section */}
-                <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
-                  <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">Calendars Shared With You</h3>
-                    <p className="mt-1 max-w-2xl text-sm text-gray-500">Calendars that others have shared with you</p>
+                <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg mb-6">
+                  <div className="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                      Calendars Shared With You
+                    </h3>
+                    <p className="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">
+                      Calendars that others have shared with you
+                    </p>
                   </div>
-                  <ul className="divide-y divide-gray-200">
+                  <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                     {sharedCalendars.map((calendar) => (
-                      <li key={calendar.id} className="px-4 py-4 sm:px-6 hover:bg-gray-50">
+                      <li key={calendar.id} className="px-4 py-4 sm:px-6 hover:bg-gray-50 dark:hover:bg-gray-700">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
                             <span
                               className="h-4 w-4 rounded-full mr-2"
                               style={{ backgroundColor: calendar.color }}
                             ></span>
-                            <span className="text-sm font-medium text-gray-900">{calendar.name}</span>
+                            <span className="text-sm font-medium text-gray-900 dark:text-white">{calendar.name}</span>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <div className="text-sm text-gray-500">Shared by {calendar.ownerName}</div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                              Shared by {calendar.ownerName}
+                            </div>
                             <button
                               onClick={() => handleCreateEvent(calendar.id)}
-                              className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-purple-700 bg-purple-100 hover:bg-purple-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                              className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-900/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-offset-gray-900"
                             >
                               <PencilIcon className="h-4 w-4 mr-1" />
                               Add Event
@@ -200,18 +206,20 @@ export default function SharedCalendars() {
 
                 {/* Shared Events Section */}
                 {sharedEvents.length > 0 ? (
-                  <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-                    <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-                      <h3 className="text-lg leading-6 font-medium text-gray-900">Events from Shared Calendars</h3>
-                      <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                  <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
+                    <div className="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700">
+                      <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                        Events from Shared Calendars
+                      </h3>
+                      <p className="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">
                         Upcoming events from calendars shared with you
                       </p>
                     </div>
-                    <ul className="divide-y divide-gray-200">
+                    <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                       {sharedEvents.map((event) => (
                         <li
                           key={event.id}
-                          className="hover:bg-gray-50 cursor-pointer"
+                          className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
                           onClick={() => handleEventClick(event)}
                         >
                           <div className="px-4 py-4 sm:px-6">
@@ -221,10 +229,12 @@ export default function SharedCalendars() {
                                   className="w-3 h-3 rounded-full mr-3"
                                   style={{ backgroundColor: event.color || "#6366f1" }}
                                 ></div>
-                                <p className="text-sm font-medium text-purple-600 truncate">{event.title}</p>
+                                <p className="text-sm font-medium text-purple-600 dark:text-purple-400 truncate">
+                                  {event.title}
+                                </p>
                               </div>
                               <div className="ml-2 flex-shrink-0 flex">
-                                <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
+                                <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300">
                                   {sharedCalendars.find((cal) => cal.id === event.calendarId)?.name ||
                                     "Shared Calendar"}
                                 </p>
@@ -232,12 +242,12 @@ export default function SharedCalendars() {
                             </div>
                             <div className="mt-2 sm:flex sm:justify-between">
                               <div className="sm:flex">
-                                <p className="flex items-center text-sm text-gray-500">
+                                <p className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                                   {event.description || "No description"}
                                 </p>
                               </div>
-                              <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                                <ClockIcon className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" />
+                              <div className="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400 sm:mt-0">
+                                <ClockIcon className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400 dark:text-gray-500" />
                                 <p>
                                   {format(event.start, "MMM d, yyyy h:mm a")} -{" "}
                                   {format(event.end, "MMM d, yyyy h:mm a")}
@@ -245,8 +255,8 @@ export default function SharedCalendars() {
                               </div>
                             </div>
                             {event.location && (
-                              <div className="mt-2 flex items-center text-sm text-gray-500">
-                                <MapPinIcon className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" />
+                              <div className="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                <MapPinIcon className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400 dark:text-gray-500" />
                                 <p>{event.location}</p>
                               </div>
                             )}
@@ -256,12 +266,16 @@ export default function SharedCalendars() {
                     </ul>
                   </div>
                 ) : (
-                  <div className="bg-white shadow rounded-lg p-6 text-center">
-                    <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-purple-100">
-                      <CalendarIcon className="h-6 w-6 text-purple-600" aria-hidden="true" />
+                  <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 text-center">
+                    <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-purple-100 dark:bg-purple-900/30">
+                      <CalendarIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" aria-hidden="true" />
                     </div>
-                    <h3 className="mt-3 text-lg font-medium text-gray-900">No events in shared calendars</h3>
-                    <p className="mt-2 text-sm text-gray-500">There are no events in the calendars shared with you.</p>
+                    <h3 className="mt-3 text-lg font-medium text-gray-900 dark:text-white">
+                      No events in shared calendars
+                    </h3>
+                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                      There are no events in the calendars shared with you.
+                    </p>
                   </div>
                 )}
               </>
@@ -271,7 +285,7 @@ export default function SharedCalendars() {
           {/* Floating action button */}
           <button
             onClick={navigateToCalendar}
-            className="fixed right-4 bottom-16 sm:bottom-6 p-3 rounded-full bg-purple-600 text-white shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 z-20"
+            className="fixed right-4 bottom-16 sm:bottom-6 p-3 rounded-full bg-purple-600 dark:bg-purple-700 text-white shadow-lg hover:bg-purple-700 dark:hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 z-20"
             aria-label="Add new event"
           >
             <PlusIcon className="h-6 w-6" />

@@ -260,18 +260,21 @@ export default function Calendar() {
     const days = eachDayOfInterval({ start: startDate, end: endDate })
 
     return (
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
         {/* Calendar grid header - days of week */}
-        <div className="grid grid-cols-7 gap-px bg-gray-200">
+        <div className="grid grid-cols-7 gap-px bg-gray-200 dark:bg-gray-700">
           {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
-            <div key={index} className="bg-gray-100 py-2 text-center text-sm font-medium text-gray-500">
+            <div
+              key={index}
+              className="bg-gray-100 dark:bg-gray-700 py-2 text-center text-sm font-medium text-gray-500 dark:text-gray-400"
+            >
               {isMobile ? day : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][index]}
             </div>
           ))}
         </div>
 
         {/* Calendar grid */}
-        <div className="grid grid-cols-7 gap-px bg-gray-200">
+        <div className="grid grid-cols-7 gap-px bg-gray-200 dark:bg-gray-700">
           {days.map((day) => {
             const dayEvents = getEventsForDay(day)
             const isToday = isSameDay(day, new Date())
@@ -279,9 +282,11 @@ export default function Calendar() {
               <div
                 key={day.toString()}
                 onClick={() => handleDateClick(day)}
-                className={`${isMobile ? "min-h-[60px]" : "min-h-[100px]"} bg-white p-1 ${
-                  isSameMonth(day, currentDate) ? "text-gray-900" : "text-gray-400"
-                } hover:bg-gray-50 cursor-pointer`}
+                className={`${isMobile ? "min-h-[60px]" : "min-h-[100px]"} bg-white dark:bg-gray-800 p-1 ${
+                  isSameMonth(day, currentDate)
+                    ? "text-gray-900 dark:text-gray-100"
+                    : "text-gray-400 dark:text-gray-500"
+                } hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer`}
               >
                 <div
                   className={`font-medium text-sm ${isToday ? "h-6 w-6 rounded-full bg-purple-600 text-white flex items-center justify-center mx-auto" : ""}`}
@@ -305,7 +310,7 @@ export default function Calendar() {
                     )
                   })}
                   {dayEvents.length > (isMobile ? 1 : 3) && (
-                    <div className="text-xs text-gray-500 text-center">
+                    <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
                       +{dayEvents.length - (isMobile ? 1 : 3)} more
                     </div>
                   )}
@@ -325,37 +330,41 @@ export default function Calendar() {
     const hours = Array.from({ length: 24 }, (_, i) => i)
 
     return (
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="grid grid-cols-8 border-b">
-          <div className="border-r p-2 text-center text-xs font-medium text-gray-500">Time</div>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+        <div className="grid grid-cols-8 border-b dark:border-gray-700">
+          <div className="border-r dark:border-gray-700 p-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400">
+            Time
+          </div>
           {days.map((day) => (
             <div
               key={day.toString()}
-              className={`p-2 text-center text-xs font-medium ${isSameDay(day, new Date()) ? "bg-purple-50" : ""}`}
+              className={`p-2 text-center text-xs font-medium ${isSameDay(day, new Date()) ? "bg-purple-50 dark:bg-purple-900/30" : ""}`}
             >
-              <div>{format(day, "EEE")}</div>
-              <div className={`font-bold ${isSameDay(day, new Date()) ? "text-purple-600" : ""}`}>
+              <div className="text-gray-500 dark:text-gray-400">{format(day, "EEE")}</div>
+              <div
+                className={`font-bold ${isSameDay(day, new Date()) ? "text-purple-600 dark:text-purple-400" : "text-gray-900 dark:text-white"}`}
+              >
                 {format(day, "d")}
               </div>
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-8 divide-x h-[500px] overflow-y-auto">
-          <div className="divide-y">
+        <div className="grid grid-cols-8 divide-x dark:divide-gray-700 h-[500px] overflow-y-auto">
+          <div className="divide-y dark:divide-gray-700">
             {hours.map((hour) => (
-              <div key={hour} className="h-12 p-1 text-xs text-gray-500 text-right pr-2">
+              <div key={hour} className="h-12 p-1 text-xs text-gray-500 dark:text-gray-400 text-right pr-2">
                 {hour === 0 ? "12a" : hour < 12 ? `${hour}a` : hour === 12 ? "12p" : `${hour - 12}p`}
               </div>
             ))}
           </div>
 
           {days.map((day) => (
-            <div key={day.toString()} className="relative divide-y">
+            <div key={day.toString()} className="relative divide-y dark:divide-gray-700">
               {hours.map((hour) => (
                 <div
                   key={hour}
-                  className="h-12 hover:bg-gray-50 cursor-pointer"
+                  className="h-12 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
                   onClick={() => {
                     const newDate = setHours(setMinutes(day, 0), hour)
                     handleDateClick(newDate)
@@ -433,28 +442,28 @@ export default function Calendar() {
     const hours = Array.from({ length: 24 }, (_, i) => i)
 
     return (
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="grid grid-cols-1 border-b p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+        <div className="grid grid-cols-1 border-b dark:border-gray-700 p-4">
           <div className="text-center">
-            <div className="text-lg font-semibold">{format(currentDate, "EEEE")}</div>
-            <div className="text-2xl font-bold">{format(currentDate, "d MMMM yyyy")}</div>
+            <div className="text-lg font-semibold text-gray-900 dark:text-white">{format(currentDate, "EEEE")}</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">{format(currentDate, "d MMMM yyyy")}</div>
           </div>
         </div>
 
-        <div className="grid grid-cols-[60px_1fr] divide-x h-[500px] overflow-y-auto">
-          <div className="divide-y">
+        <div className="grid grid-cols-[60px_1fr] divide-x dark:divide-gray-700 h-[500px] overflow-y-auto">
+          <div className="divide-y dark:divide-gray-700">
             {hours.map((hour) => (
-              <div key={hour} className="h-12 p-1 text-xs text-gray-500 text-right pr-2">
+              <div key={hour} className="h-12 p-1 text-xs text-gray-500 dark:text-gray-400 text-right pr-2">
                 {hour === 0 ? "12a" : hour < 12 ? `${hour}a` : hour === 12 ? "12p" : `${hour - 12}p`}
               </div>
             ))}
           </div>
 
-          <div className="relative divide-y">
+          <div className="relative divide-y dark:divide-gray-700">
             {hours.map((hour) => (
               <div
                 key={hour}
-                className="h-12 hover:bg-gray-50 cursor-pointer"
+                className="h-12 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
                 onClick={() => {
                   const newDate = setHours(setMinutes(currentDate, 0), hour)
                   handleDateClick(newDate)
@@ -527,7 +536,7 @@ export default function Calendar() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
       {/* Sidebar - hidden by default on mobile */}
       <Sidebar
         isMobile={isMobile}
@@ -543,10 +552,10 @@ export default function Calendar() {
       )}
 
       {/* Main content - takes full width on mobile when sidebar is closed */}
-      <div className={`flex-1 flex flex-col overflow-hidden ${!isMobile ? "md:ml-64" : ""}`}>
+      <div className={`flex-1 flex flex-col overflow-hidden ${!isMobile ? "md:ml-64" : ""} bg-white dark:bg-gray-800`}>
         <Navbar toggleMobileSidebar={toggleMobileSidebar} />
 
-        <main className="flex-1 overflow-y-auto p-2 sm:p-4 pb-20">
+        <main className="flex-1 overflow-y-auto p-2 sm:p-4 pb-20 bg-gray-50 dark:bg-gray-900">
           <CalendarHeader
             currentDate={currentDate}
             onPrev={prevMonth}
@@ -566,7 +575,7 @@ export default function Calendar() {
         {/* Floating action button - adjusted for better mobile visibility */}
         <button
           onClick={handleCreateEvent}
-          className="fixed right-4 bottom-16 sm:bottom-6 p-3 rounded-full bg-purple-600 text-white shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 z-20"
+          className="fixed right-4 bottom-16 sm:bottom-6 p-3 rounded-full bg-purple-600 dark:bg-purple-700 text-white shadow-lg hover:bg-purple-700 dark:hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 z-20"
           aria-label="Add new event"
         >
           <PlusIcon className="h-6 w-6" />

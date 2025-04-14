@@ -149,7 +149,7 @@ export default function NotificationsDropdown() {
   return (
     <Menu as="div" className="relative">
       <div>
-        <Menu.Button className="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+        <Menu.Button className="relative rounded-full bg-white dark:bg-gray-700 p-1 text-gray-400 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
           <span className="sr-only">View notifications</span>
           <BellIcon className="h-6 w-6" aria-hidden="true" />
           {unreadCount > 0 && (
@@ -168,13 +168,13 @@ export default function NotificationsDropdown() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 w-80 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <div className="px-4 py-2 border-b border-gray-100 flex items-center justify-between">
-            <h3 className="text-sm font-medium text-gray-900">Notifications</h3>
+        <Menu.Items className="absolute right-0 z-10 mt-2 w-80 origin-top-right rounded-md bg-white dark:bg-gray-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-gray-700 focus:outline-none">
+          <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+            <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">Notifications</h3>
             {unreadCount > 0 && (
               <button
                 onClick={markAllAsRead}
-                className="text-xs text-purple-600 hover:text-purple-800 font-medium flex items-center"
+                className="text-xs text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 font-medium flex items-center"
               >
                 <CheckIcon className="h-3 w-3 mr-1" />
                 Mark all as read
@@ -183,16 +183,16 @@ export default function NotificationsDropdown() {
           </div>
 
           {loading ? (
-            <div className="px-4 py-6 text-center text-sm text-gray-500">
+            <div className="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
               <div className="flex justify-center mb-3">
-                <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-purple-600"></div>
+                <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-purple-600 dark:border-purple-400"></div>
               </div>
               <p>Loading notifications...</p>
             </div>
           ) : notifications.length === 0 ? (
-            <div className="px-4 py-6 text-center text-sm text-gray-500">
+            <div className="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
               <div className="flex justify-center mb-3">
-                <BellIcon className="h-6 w-6 text-gray-400" />
+                <BellIcon className="h-6 w-6 text-gray-400 dark:text-gray-500" />
               </div>
               <p>No notifications yet</p>
               <p className="mt-1 text-xs">We'll notify you when something happens</p>
@@ -204,19 +204,25 @@ export default function NotificationsDropdown() {
                   {({ active }) => (
                     <div
                       className={`
-                        ${active ? "bg-gray-50" : ""}
-                        ${!notification.read ? "bg-purple-50" : ""}
+                        ${active ? "bg-gray-50 dark:bg-gray-700" : ""}
+                        ${!notification.read ? "bg-purple-50 dark:bg-purple-900/30" : ""}
                         px-4 py-3 flex cursor-pointer
                       `}
                       onClick={() => markAsRead(notification.id)}
                     >
                       <div className="flex-shrink-0 mr-3 mt-1">{getNotificationIcon(notification.type)}</div>
                       <div className="flex-1 min-w-0">
-                        <p className={`text-sm ${!notification.read ? "font-medium" : "text-gray-700"}`}>
+                        <p
+                          className={`text-sm ${!notification.read ? "font-medium text-gray-900 dark:text-white" : "text-gray-700 dark:text-gray-300"}`}
+                        >
                           {notification.title}
                         </p>
-                        <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{notification.message}</p>
-                        <p className="text-xs text-gray-400 mt-1">{getTimeAgo(notification.createdAt)}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
+                          {notification.message}
+                        </p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                          {getTimeAgo(notification.createdAt)}
+                        </p>
                       </div>
                     </div>
                   )}
