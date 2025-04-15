@@ -19,6 +19,7 @@ export default function Settings() {
   const [emailNotifications, setEmailNotifications] = useState(true)
   const isMobile = useMediaQuery("(max-width: 768px)")
   const navigate = useNavigate()
+  const [selectedCalendars, setSelectedCalendars] = useState([])
 
   // Add a function to navigate to the calendar page
   const navigateToCalendar = () => {
@@ -40,22 +41,38 @@ export default function Settings() {
     }
   }
 
-  const toggleMobileSidebar = () => {
-    setMobileSidebarOpen(!mobileSidebarOpen)
+  const toggleMobileSidebar = (value) => {
+    setMobileSidebarOpen(typeof value === "boolean" ? value : !mobileSidebarOpen)
   }
 
-  // Update the Sidebar component to pass the navigateToCalendar function
+  // Dummy function for calendar toggle since we don't need it in settings
+  const handleCalendarToggle = (calendar) => {
+    setSelectedCalendars((prev) => {
+      if (prev.includes(calendar.id)) {
+        return prev.filter((id) => id !== calendar.id)
+      } else {
+        return [...prev, calendar.id]
+      }
+    })
+  }
+
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-      <Sidebar isMobile={isMobile} toggleMobileSidebar={mobileSidebarOpen} onCreateEvent={navigateToCalendar} />
+      <Sidebar
+        isMobile={isMobile}
+        toggleMobileSidebar={mobileSidebarOpen}
+        onCreateEvent={navigateToCalendar}
+        selectedCalendars={selectedCalendars}
+        onCalendarToggle={handleCalendarToggle}
+      />
 
       {/* Mobile sidebar backdrop */}
       {isMobile && mobileSidebarOpen && (
-        <div className="fixed inset-0 z-30 bg-gray-600 bg-opacity-75" onClick={() => setMobileSidebarOpen(false)}></div>
+        <div className="fixed inset-0 z-30 bg-gray-600 bg-opacity-75" onClick={() => toggleMobileSidebar(false)}></div>
       )}
 
       <div className="flex-1 flex flex-col overflow-hidden md:ml-64">
-        <Navbar toggleMobileSidebar={setMobileSidebarOpen} />
+        <Navbar toggleMobileSidebar={toggleMobileSidebar} />
 
         <main className="flex-1 overflow-y-auto p-4 pb-20 bg-gray-50 dark:bg-gray-900">
           <div className="max-w-7xl mx-auto">

@@ -18,14 +18,18 @@ import { db } from "../firebase"
  * @param {string} name - The calendar name
  * @param {string} color - The calendar color
  * @param {boolean} isDefault - Whether this is the default calendar
+ * @param {string} userEmail - The email of the user creating the calendar
+ * @param {string} userName - The display name of the user creating the calendar
  * @returns {Promise<string>} - The calendar ID
  */
-export const createCalendar = async (userId, name, color, isDefault = false) => {
+export const createCalendar = async (userId, name, color, isDefault = false, userEmail = "", userName = "") => {
   try {
     const calendarRef = await addDoc(collection(db, "calendars"), {
       name,
       color,
       ownerId: userId,
+      ownerEmail: userEmail, // Store the email for better display
+      ownerName: userName || (userEmail ? userEmail.split("@")[0] : ""), // Store the display name when available
       isDefault,
       members: [userId], // Owner is always a member
       sharedEmails: [], // Emails of users this calendar is shared with
@@ -43,11 +47,12 @@ export const createCalendar = async (userId, name, color, isDefault = false) => 
  * Creates a default calendar for a new user
  * @param {string} userId - The user ID
  * @param {string} displayName - The user's display name
+ * @param {string} email - The user's email
  * @returns {Promise<string>} - The calendar ID
  */
-export const createDefaultCalendar = async (userId, displayName) => {
+export const createDefaultCalendar = async (userId, displayName, email = "") => {
   const name = `${displayName}'s Calendar`
-  return createCalendar(userId, name, "#6366f1", true)
+  return createCalendar(userId, name, "#6366f1", true, email, displayName)
 }
 
 /**
@@ -132,9 +137,10 @@ export const deleteCalendar = async (calendarId) => {
  * Shares a calendar with another user
  * @param {string} calendarId - The calendar ID
  * @param {string} email - The email of the user to share with
+ * @param {Object} ownerInfo - Information about the owner (optional)
  * @returns {Promise<void>}
  */
-export const shareCalendarWithUser = async (calendarId, email) => {
+export const shareCalendarWithUser = async (calendarId, email, ownerInfo = {}) => {
   try {
     const calendarDoc = await getDoc(doc(db, "calendars", calendarId))
     if (!calendarDoc.exists()) {
@@ -144,15 +150,26 @@ export const shareCalendarWithUser = async (calendarId, email) => {
     const calendarData = calendarDoc.data()
     const sharedEmails = [...(calendarData.sharedEmails || []), email]
 
-    // Update the calendar with the new shared email
-    await updateDoc(doc(db, "calendars", calendarId), {
+    // Update the calendar with the new shared email and owner info if provided
+    const updateData = {
       sharedEmails,
       updatedAt: serverTimestamp(),
-    })
+    }
 
-    // Also add the user to the members array so they can access the calendar
-    // In a real app, you'd look up the user ID from the email
-    // For now, we'll just use the email as a placeholder
+    // Always update owner info if provided
+    if (ownerInfo.ownerEmail) {
+      updateData.ownerEmail = ownerInfo.ownerEmail
+    }
+
+    if (ownerInfo.ownerName) {
+      updateData.ownerName = ownerInfo.ownerName
+    }
+
+    await updateDoc(doc(db, "calendars", calendarId), updateData)
+
+    // Also add the user to the members array  "calendars", calendarId), updateData)
+
+    // Also add the user to the members array
     const members = [...(calendarData.members || [])]
     if (!members.includes(email)) {
       members.push(email)
@@ -214,6 +231,45 @@ export const getCalendarEvents = async (calendarId) => {
     }))
   } catch (error) {
     console.error("Error getting calendar events:", error)
+    throw error
+  }
+}
+
+/**
+ * Shares a calendar with multiple users
+ * @param {string} calendarId - The calendar ID
+ * @param {Array<string>} emails - Array of emails to share with
+ * @returns {Promise<void>}
+ */
+export const shareCalendarWithUsers = async (calendarId, emails) => {
+  try {
+    // First get the current user/owner info
+    const calendarDoc = await getDoc(doc(db, "calendars", calendarId))
+    if (!calendarDoc.exists()) {
+      throw new Error("Calendar not found")
+    }
+    
+    const calendarData = calendarDoc.data()
+    
+    // Prepare owner info from calendar data
+    const ownerInfo = {
+      ownerEmail: calendarData.ownerEmail,
+      ownerName: calendarData.ownerName
+    }
+    
+    // If owner info is not available in calendar data, use a fallback
+    if (!ownerInfo.ownerEmail || !ownerInfo.ownerName) {
+      console.warn("Missing owner information in calendar. Using fallback display value.");
+    }
+    
+    // Share with each email
+    for (const email of emails) {
+      if (!calendarData.sharedEmails.includes(email)) {
+        await shareCalendarWithUser(calendarId, email, ownerInfo)
+      }
+    }
+  } catch (error) {
+    console.error("Error sharing calendar with multiple users:", error)
     throw error
   }
 }

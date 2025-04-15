@@ -35,7 +35,14 @@ export default function ShareCalendarModal({ isOpen, onClose, calendar }) {
 
     try {
       setLoading(true)
-      await shareCalendarWithUser(calendar.id, email)
+      
+      // Make sure we're passing the owner's email and name when sharing
+      const ownerInfo = {
+        ownerEmail: currentUser.email,
+        ownerName: currentUser.displayName || currentUser.email.split("@")[0],
+      }
+      
+      await shareCalendarWithUser(calendar.id, email, ownerInfo)
 
       // Create notification for the shared user
       // In a real app, you would get the user ID from the email

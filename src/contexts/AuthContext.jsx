@@ -26,7 +26,7 @@ export function AuthProvider({ children }) {
       // First update the profile with the display name
       return updateProfile(userCredential.user, { displayName }).then(() => {
         // Then create a default calendar for the new user
-        return createDefaultCalendar(userCredential.user.uid, displayName || email)
+        return createDefaultCalendar(userCredential.user.uid, displayName || email, email)
       })
     })
   }

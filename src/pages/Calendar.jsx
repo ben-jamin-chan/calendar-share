@@ -22,7 +22,7 @@ import {
   isWithinInterval,
   isAfter,
 } from "date-fns"
-import { collection, query, where, onSnapshot, getDocs, doc, getDoc } from "firebase/firestore"
+import { collection, query, where, onSnapshot, doc, getDoc } from "firebase/firestore"
 import { db } from "../firebase"
 import { useAuth } from "../contexts/AuthContext"
 import Navbar from "../components/Navbar"
@@ -33,6 +33,7 @@ import { PlusIcon } from "@heroicons/react/24/outline"
 import { useMediaQuery } from "../hooks/useMediaQuery"
 import { createEventReminderNotification } from "../services/notificationService"
 import { getUserCalendars } from "../services/calendarService"
+import { useSharedCalendars } from "../contexts/SharedCalendarsContext"
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -43,7 +44,7 @@ export default function Calendar() {
   const [view, setView] = useState("month") // 'month', 'week', 'day'
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [calendars, setCalendars] = useState([])
-  const [sharedCalendars, setSharedCalendars] = useState([])
+  const { sharedCalendars } = useSharedCalendars()
   const [selectedCalendars, setSelectedCalendars] = useState([])
   const { currentUser } = useAuth()
   const isMobile = useMediaQuery("(max-width: 768px)")
@@ -65,22 +66,8 @@ export default function Calendar() {
         const userCalendars = await getUserCalendars(currentUser.uid)
         setCalendars(userCalendars)
 
-        // Get calendars shared with the user
-        const sharedCalendarsRef = collection(db, "calendars")
-        const sharedQuery = query(sharedCalendarsRef, where("sharedEmails", "array-contains", currentUser.email))
-        const sharedSnapshot = await getDocs(sharedQuery)
-
-        const sharedCalendarsData = sharedSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: doc.data().createdAt?.toDate() || new Date(),
-          updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-        }))
-
-        setSharedCalendars(sharedCalendarsData)
-
         // Select all calendars by default (both owned and shared)
-        const allCalendarIds = [...userCalendars, ...sharedCalendarsData].map((cal) => cal.id)
+        const allCalendarIds = [...userCalendars, ...sharedCalendars].map((cal) => cal.id)
         setSelectedCalendars(allCalendarIds)
       } catch (error) {
         console.error("Error fetching calendars:", error)
@@ -88,7 +75,7 @@ export default function Calendar() {
     }
 
     fetchAllCalendars()
-  }, [currentUser])
+  }, [currentUser, sharedCalendars])
 
   // Fetch events for selected calendars
   useEffect(() => {

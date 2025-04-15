@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { collection, query, where, onSnapshot, getDocs } from "firebase/firestore"
+import { collection, query, where, onSnapshot } from "firebase/firestore"
 import { db } from "../firebase"
 import { useAuth } from "../contexts/AuthContext"
 import Navbar from "../components/Navbar"
@@ -12,10 +12,10 @@ import { CalendarIcon, ClockIcon, MapPinIcon, PlusIcon, PencilIcon } from "@hero
 import { useNavigate } from "react-router-dom"
 import ShareCalendarModal from "./ShareCalendarModal"
 import EventModal from "../components/EventModal"
+import { useSharedCalendars } from "../contexts/SharedCalendarsContext"
 
 export default function SharedCalendars() {
   const [sharedEvents, setSharedEvents] = useState([])
-  const [sharedCalendars, setSharedCalendars] = useState([])
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [selectedCalendar, setSelectedCalendar] = useState(null)
   const [isShareModalOpen, setIsShareModalOpen] = useState(false)
@@ -23,70 +23,30 @@ export default function SharedCalendars() {
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [selectedDate, setSelectedDate] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [selectedCalendars, setSelectedCalendars] = useState([])
   const { currentUser } = useAuth()
+  const { sharedCalendars, loading: sharedCalendarsLoading } = useSharedCalendars()
   const isMobile = useMediaQuery("(max-width: 768px)")
   const navigate = useNavigate()
 
-  // Fetch shared calendars
+  // Initialize selected calendars with all shared calendars
   useEffect(() => {
-    if (!currentUser) return
-
-    const fetchSharedCalendars = async () => {
-      try {
-        // Get calendars shared with the user
-        const calendarsRef = collection(db, "calendars")
-        const q = query(calendarsRef, where("sharedEmails", "array-contains", currentUser.email))
-        const querySnapshot = await getDocs(q)
-
-        const calendarsData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: doc.data().createdAt?.toDate() || new Date(),
-          updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-        }))
-
-        // For each shared calendar, fetch the owner's details
-        const calendarsWithOwnerDetails = await Promise.all(
-          calendarsData.map(async (calendar) => {
-            try {
-              // Get owner details from Firebase Auth
-              // In a real app, you would have a users collection to look up by UID
-              // For now, we'll just use the ownerId as is
-              return {
-                ...calendar,
-                ownerName: calendar.ownerId, // Placeholder - in a real app, get the actual name
-              }
-            } catch (error) {
-              console.error("Error fetching owner details:", error)
-              return {
-                ...calendar,
-                ownerName: "Unknown User",
-              }
-            }
-          }),
-        )
-
-        setSharedCalendars(calendarsWithOwnerDetails)
-        setLoading(false)
-      } catch (error) {
-        console.error("Error fetching shared calendars:", error)
-        setLoading(false)
-      }
+    if (sharedCalendars.length > 0) {
+      setSelectedCalendars(sharedCalendars.map((cal) => cal.id))
     }
-
-    fetchSharedCalendars()
-  }, [currentUser])
+  }, [sharedCalendars])
 
   // Fetch events from shared calendars
   useEffect(() => {
-    if (!currentUser || sharedCalendars.length === 0) return
-
-    // Get all calendar IDs that are shared with the user
-    const calendarIds = sharedCalendars.map((cal) => cal.id)
+    if (!currentUser || selectedCalendars.length === 0) {
+      setSharedEvents([])
+      setLoading(false)
+      return
+    }
 
     // Query events for these calendars
     const eventsRef = collection(db, "events")
-    const q = query(eventsRef, where("calendarId", "in", calendarIds))
+    const q = query(eventsRef, where("calendarId", "in", selectedCalendars))
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const eventsData = snapshot.docs.map((doc) => ({
@@ -96,10 +56,11 @@ export default function SharedCalendars() {
         end: doc.data().end.toDate(),
       }))
       setSharedEvents(eventsData)
+      setLoading(false)
     })
 
     return unsubscribe
-  }, [currentUser, sharedCalendars])
+  }, [currentUser, selectedCalendars])
 
   const toggleMobileSidebar = (value) => {
     setMobileSidebarOpen(typeof value === "boolean" ? value : !mobileSidebarOpen)
@@ -132,9 +93,25 @@ export default function SharedCalendars() {
     navigate("/")
   }
 
+  const handleCalendarToggle = (calendar) => {
+    setSelectedCalendars((prev) => {
+      if (prev.includes(calendar.id)) {
+        return prev.filter((id) => id !== calendar.id)
+      } else {
+        return [...prev, calendar.id]
+      }
+    })
+  }
+
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-      <Sidebar isMobile={isMobile} toggleMobileSidebar={mobileSidebarOpen} onCreateEvent={navigateToCalendar} />
+      <Sidebar
+        isMobile={isMobile}
+        toggleMobileSidebar={mobileSidebarOpen}
+        onCreateEvent={navigateToCalendar}
+        selectedCalendars={selectedCalendars}
+        onCalendarToggle={handleCalendarToggle}
+      />
 
       {/* Mobile sidebar backdrop */}
       {isMobile && mobileSidebarOpen && (
@@ -148,7 +125,7 @@ export default function SharedCalendars() {
           <div className="max-w-7xl mx-auto">
             <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Shared Calendars</h1>
 
-            {loading ? (
+            {loading || sharedCalendarsLoading ? (
               <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-purple-600 dark:border-purple-400 mx-auto"></div>
                 <p className="mt-4 text-gray-600 dark:text-gray-400">Loading shared calendars...</p>
@@ -188,7 +165,7 @@ export default function SharedCalendars() {
                           </div>
                           <div className="flex items-center space-x-2">
                             <div className="text-sm text-gray-500 dark:text-gray-400">
-                              Shared by {calendar.ownerName}
+                              Shared by {calendar.ownerName || calendar.ownerEmail || "Unknown User"}
                             </div>
                             <button
                               onClick={() => handleCreateEvent(calendar.id)}

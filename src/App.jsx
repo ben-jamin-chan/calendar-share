@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { Toaster } from "react-hot-toast"
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
 import { ThemeProvider } from "./contexts/ThemeContext"
+import { SharedCalendarsProvider } from "./contexts/SharedCalendarsContext"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Calendar from "./pages/Calendar"
@@ -33,59 +34,61 @@ function App() {
   return (
     <AuthProvider>
       <ThemeProvider>
-        <Router>
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              style: {
-                background: "#363636",
-                color: "#fff",
-              },
-              success: {
-                duration: 3000,
-                iconTheme: {
-                  primary: "#4ade80",
-                  secondary: "#fff",
+        <SharedCalendarsProvider>
+          <Router>
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                style: {
+                  background: "#363636",
+                  color: "#fff",
                 },
-              },
-              error: {
-                duration: 4000,
-                iconTheme: {
-                  primary: "#ef4444",
-                  secondary: "#fff",
+                success: {
+                  duration: 3000,
+                  iconTheme: {
+                    primary: "#4ade80",
+                    secondary: "#fff",
+                  },
                 },
-              },
-            }}
-          />
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <Calendar />
-                </ProtectedRoute>
-              }
+                error: {
+                  duration: 4000,
+                  iconTheme: {
+                    primary: "#ef4444",
+                    secondary: "#fff",
+                  },
+                },
+              }}
             />
-            <Route
-              path="/shared"
-              element={
-                <ProtectedRoute>
-                  <SharedCalendars />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/settings"
-              element={
-                <ProtectedRoute>
-                  <Settings />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </Router>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <Calendar />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/shared"
+                element={
+                  <ProtectedRoute>
+                    <SharedCalendars />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  <ProtectedRoute>
+                    <Settings />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </Router>
+        </SharedCalendarsProvider>
       </ThemeProvider>
     </AuthProvider>
   )

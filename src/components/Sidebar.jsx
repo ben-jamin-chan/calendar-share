@@ -12,10 +12,9 @@ import {
 } from "@heroicons/react/24/outline"
 import { useState, useEffect } from "react"
 import { useAuth } from "../contexts/AuthContext"
+import { useSharedCalendars } from "../contexts/SharedCalendarsContext"
 import { getUserCalendars } from "../services/calendarService"
 import ManageCalendarsModal from "./ManageCalendarsModal"
-import { collection, query, where, getDocs } from "firebase/firestore"
-import { db } from "../firebase"
 
 export default function Sidebar({
   isMobile,
@@ -26,13 +25,12 @@ export default function Sidebar({
 }) {
   const location = useLocation()
   const { currentUser } = useAuth()
+  const { sharedCalendars, loading: sharedLoading } = useSharedCalendars()
   const [isManageCalendarsModalOpen, setIsManageCalendarsModalOpen] = useState(false)
   const [myCalendarsOpen, setMyCalendarsOpen] = useState(true)
   const [sharedCalendarsOpen, setSharedCalendarsOpen] = useState(true)
   const [calendars, setCalendars] = useState([])
-  const [sharedCalendars, setSharedCalendars] = useState([])
   const [loading, setLoading] = useState(true)
-  const [sharedLoading, setSharedLoading] = useState(true)
   const navigate = useNavigate()
 
   // Fetch user calendars
@@ -51,35 +49,6 @@ export default function Sidebar({
     }
 
     fetchCalendars()
-  }, [currentUser])
-
-  // Fetch shared calendars
-  useEffect(() => {
-    const fetchSharedCalendars = async () => {
-      if (!currentUser) return
-
-      try {
-        // Get calendars shared with the user
-        const calendarsRef = collection(db, "calendars")
-        const q = query(calendarsRef, where("sharedEmails", "array-contains", currentUser.email))
-        const querySnapshot = await getDocs(q)
-
-        const calendarsData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: doc.data().createdAt?.toDate() || new Date(),
-          updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-        }))
-
-        setSharedCalendars(calendarsData)
-        setSharedLoading(false)
-      } catch (error) {
-        console.error("Error fetching shared calendars:", error)
-        setSharedLoading(false)
-      }
-    }
-
-    fetchSharedCalendars()
   }, [currentUser])
 
   const handleCreateClick = () => {
@@ -256,15 +225,7 @@ export default function Sidebar({
                   </div>
                 ) : sharedCalendars.length === 0 ? (
                   <div className="py-2 px-1">
-                    <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">No shared calendars</div>
-                    <Link
-                      to="/shared"
-                      className="flex items-center text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300"
-                      onClick={isMobile ? () => toggleMobileSidebar(false) : undefined}
-                    >
-                      <UsersIcon className="h-4 w-4 mr-1" />
-                      View shared calendars
-                    </Link>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">No shared calendars</div>
                   </div>
                 ) : (
                   sharedCalendars.map((calendar) => (
@@ -279,20 +240,13 @@ export default function Sidebar({
                       <div className="flex items-center ml-2 flex-1">
                         <span className="h-3 w-3 rounded-full mr-2" style={{ backgroundColor: calendar.color }}></span>
                         <span className="text-sm text-gray-700 dark:text-gray-300">{calendar.name}</span>
-                        <span className="ml-1 text-xs text-gray-500 dark:text-gray-400">(Shared)</span>
+                        <span className="ml-1 text-xs text-gray-500 dark:text-gray-400">
+                          (Shared by {calendar.ownerName || calendar.ownerEmail})
+                        </span>
                       </div>
                     </div>
                   ))
                 )}
-
-                <Link
-                  to="/shared"
-                  className="flex items-center text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 mt-2"
-                  onClick={isMobile ? () => toggleMobileSidebar(false) : undefined}
-                >
-                  <UsersIcon className="h-4 w-4 mr-1" />
-                  Manage shared calendars
-                </Link>
               </div>
             )}
           </div>

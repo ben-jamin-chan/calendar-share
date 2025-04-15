@@ -28,14 +28,21 @@ export default function ShareCalendarModal({ isOpen, onClose, calendar }) {
     }
 
     // Check if already shared
-    if (calendar.sharedEmails && calendar.sharedEmails.includes(email)) {
+    if (calendar.sharedEmails.includes(email)) {
       toast.error("Calendar already shared with this email")
       return
     }
 
     try {
       setLoading(true)
-      await shareCalendarWithUser(calendar.id, email)
+
+      // Make sure we're passing the owner's email and name when sharing
+      const ownerInfo = {
+        ownerEmail: currentUser.email,
+        ownerName: currentUser.displayName || currentUser.email.split("@")[0],
+      }
+
+      await shareCalendarWithUser(calendar.id, email, ownerInfo)
 
       // Create notification for the shared user
       // In a real app, you would get the user ID from the email
@@ -62,7 +69,10 @@ export default function ShareCalendarModal({ isOpen, onClose, calendar }) {
       setLoading(true)
       await removeUserFromCalendar(calendar.id, emailToRemove)
       toast.success(`Removed ${emailToRemove} from calendar`)
-      onClose()
+
+      // Update the calendar object in the parent component
+      const updatedSharedEmails = calendar.sharedEmails.filter((e) => e !== emailToRemove)
+      calendar.sharedEmails = updatedSharedEmails
     } catch (error) {
       console.error("Error removing user from calendar:", error)
       toast.error("Failed to remove user from calendar")
