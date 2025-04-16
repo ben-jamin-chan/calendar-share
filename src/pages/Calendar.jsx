@@ -250,7 +250,7 @@ export default function Calendar() {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
         {/* Calendar grid header - days of week */}
         <div className="grid grid-cols-7 gap-px bg-gray-200 dark:bg-gray-700">
-          {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
+          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
             <div
               key={index}
               className="bg-gray-100 dark:bg-gray-700 py-2 text-center text-sm font-medium text-gray-500 dark:text-gray-400"
@@ -269,25 +269,25 @@ export default function Calendar() {
               <div
                 key={day.toString()}
                 onClick={() => handleDateClick(day)}
-                className={`${isMobile ? "min-h-[60px]" : "min-h-[100px]"} bg-white dark:bg-gray-800 p-1 ${
+                className={`${isMobile ? "min-h-[80px]" : "min-h-[100px]"} bg-white dark:bg-gray-800 p-1 ${
                   isSameMonth(day, currentDate)
                     ? "text-gray-900 dark:text-gray-100"
                     : "text-gray-400 dark:text-gray-500"
                 } hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer`}
               >
                 <div
-                  className={`font-medium text-sm ${isToday ? "h-6 w-6 rounded-full bg-purple-600 text-white flex items-center justify-center mx-auto" : ""}`}
+                  className={`font-medium ${isMobile ? "text-base" : "text-sm"} ${isToday ? "h-6 w-6 rounded-full bg-purple-600 text-white flex items-center justify-center mx-auto" : ""}`}
                 >
                   {format(day, "d")}
                 </div>
-                <div className={`mt-1 space-y-1 ${isMobile ? "max-h-[40px]" : "max-h-[80px]"} overflow-y-auto`}>
+                <div className={`mt-1 space-y-1 ${isMobile ? "max-h-[60px]" : "max-h-[80px]"} overflow-y-auto`}>
                   {dayEvents.slice(0, isMobile ? 1 : 3).map((event) => {
                     const formattedEvent = formatEventForDay(event, day)
                     return (
                       <div
                         key={event.id}
                         onClick={(e) => handleEventClick(event, e)}
-                        className="px-1 py-0.5 text-xs rounded truncate text-white transition-colors duration-200 hover:brightness-90 hover:shadow-sm"
+                        className={`px-1 py-0.5 ${isMobile ? "text-sm" : "text-xs"} rounded truncate text-white transition-colors duration-200 hover:brightness-90 hover:shadow-sm`}
                         style={{
                           backgroundColor: event.color || "#6366f1",
                         }}
@@ -337,11 +337,11 @@ export default function Calendar() {
           ))}
         </div>
 
-        <div className="grid grid-cols-8 divide-x dark:divide-gray-700 h-[500px] overflow-y-auto">
+        <div className={`grid grid-cols-8 divide-x dark:divide-gray-700 ${isMobile ? "h-[calc(100vh-10rem)]" : "h-[500px]"} overflow-y-auto`}>
           <div className="divide-y dark:divide-gray-700">
             {hours.map((hour) => (
               <div key={hour} className="h-12 p-1 text-xs text-gray-500 dark:text-gray-400 text-right pr-2">
-                {hour === 0 ? "12a" : hour < 12 ? `${hour}a` : hour === 12 ? "12p" : `${hour - 12}p`}
+                {hour === 0 ? "12am" : hour < 12 ? `${hour}am` : hour === 12 ? "12pm" : `${hour - 12}pm`}
               </div>
             ))}
           </div>
@@ -437,11 +437,11 @@ export default function Calendar() {
           </div>
         </div>
 
-        <div className="grid grid-cols-[60px_1fr] divide-x dark:divide-gray-700 h-[500px] overflow-y-auto">
+        <div className={`grid grid-cols-[60px_1fr] divide-x dark:divide-gray-700 ${isMobile ? "h-[calc(100vh-10rem)]" : "h-[500px]"} overflow-y-auto`}>
           <div className="divide-y dark:divide-gray-700">
             {hours.map((hour) => (
               <div key={hour} className="h-12 p-1 text-xs text-gray-500 dark:text-gray-400 text-right pr-2">
-                {hour === 0 ? "12a" : hour < 12 ? `${hour}a` : hour === 12 ? "12p" : `${hour - 12}p`}
+                {hour === 0 ? "12am" : hour < 12 ? `${hour}am` : hour === 12 ? "12pm" : `${hour - 12}pm`}
               </div>
             ))}
           </div>

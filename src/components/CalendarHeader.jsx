@@ -53,7 +53,7 @@ export default function CalendarHeader({ currentDate, onPrev, onNext, view, onVi
                 : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
             }`}
           >
-            {isMobile ? "M" : "Month"}
+            {isMobile ? "Month" : "Month"}
           </button>
           <button
             type="button"
@@ -64,7 +64,7 @@ export default function CalendarHeader({ currentDate, onPrev, onNext, view, onVi
                 : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
             }`}
           >
-            {isMobile ? "W" : "Week"}
+            {isMobile ? "Week" : "Week"}
           </button>
           <button
             type="button"
@@ -75,7 +75,7 @@ export default function CalendarHeader({ currentDate, onPrev, onNext, view, onVi
                 : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
             }`}
           >
-            {isMobile ? "D" : "Day"}
+            {isMobile ? "Day" : "Day"}
           </button>
         </div>
       </div>
@@ -92,7 +92,7 @@ export default function CalendarHeader({ currentDate, onPrev, onNext, view, onVi
               }`}
               onClick={() => onViewChange("day", day)}
             >
-              <span className="text-xs">{format(day, "EEE").charAt(0)}</span>
+              <span className="text-xs">{format(day, "EEE")}</span>
               <span className="text-xs font-semibold">{format(day, "d")}</span>
             </div>
           ))}
