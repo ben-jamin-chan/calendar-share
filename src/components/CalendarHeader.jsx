@@ -15,7 +15,7 @@ export default function CalendarHeader({ currentDate, onPrev, onNext, view, onVi
     <div className="flex flex-col mb-1 text-gray-900 dark:text-gray-100">
       <div className="flex items-center justify-between py-1 sm:py-4">
         <div className="flex items-center">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
+          <h2 className="text-lg sm:text-xl font-semibold ml-3 text-gray-900">
             {format(currentDate, isMobile ? "MMM yyyy" : "MMMM yyyy")}
           </h2>
           <div className="ml-2 sm:ml-6 flex space-x-1 sm:space-x-2">
