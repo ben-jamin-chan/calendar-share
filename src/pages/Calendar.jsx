@@ -356,7 +356,7 @@ export default function Calendar() {
           <div className="divide-y dark:divide-gray-700">
             {hours.map((hour) => (
               <div key={hour} className="h-16 p-1 text-xs text-gray-500 dark:text-gray-400 text-right pr-2">
-                {hour === 0 ? "12a" : hour < 12 ? `${hour}a` : hour === 12 ? "12p" : `${hour - 12}p`}
+                {hour === 0 ? "12am" : hour < 12 ? `${hour}am` : hour === 12 ? "12pm" : `${hour - 12}pm`}
               </div>
             ))}
           </div>
@@ -456,7 +456,7 @@ export default function Calendar() {
           <div className="divide-y dark:divide-gray-700">
             {hours.map((hour) => (
               <div key={hour} className="h-16 p-1 text-xs text-gray-500 dark:text-gray-400 text-right pr-2">
-                {hour === 0 ? "12a" : hour < 12 ? `${hour}a` : hour === 12 ? "12p" : `${hour - 12}p`}
+                {hour === 0 ? "12am" : hour < 12 ? `${hour}am` : hour === 12 ? "12pm" : `${hour - 12}pm`}
               </div>
             ))}
           </div>
