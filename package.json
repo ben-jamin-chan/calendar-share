@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages --dist dist --no-history"
+    "deploy": "gh-pages --dist dist --no-history --dotfiles"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.1",
