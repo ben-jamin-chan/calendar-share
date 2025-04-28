@@ -21,6 +21,10 @@ import {
   isBefore,
   isWithinInterval,
   isAfter,
+  addWeeks,
+  subWeeks,
+  addDays,
+  subDays,
 } from "date-fns"
 import { collection, query, where, onSnapshot, doc, getDoc } from "firebase/firestore"
 import { db } from "../firebase"
@@ -31,6 +35,7 @@ import EventModal from "../components/EventModal"
 import CalendarHeader from "../components/CalendarHeader"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { useMediaQuery } from "../hooks/useMediaQuery"
+import useSwipeGesture from "../hooks/useSwipeGesture"
 import { createEventReminderNotification } from "../services/notificationService"
 import { getUserCalendars } from "../services/calendarService"
 import { useSharedCalendars } from "../contexts/SharedCalendarsContext"
@@ -171,10 +176,34 @@ export default function Calendar() {
   const prevMonth = () => setCurrentDate(subMonths(currentDate, 1))
   const goToToday = () => setCurrentDate(new Date())
 
+  const nextWeek = () => setCurrentDate(addWeeks(currentDate, 1))
+  const prevWeek = () => setCurrentDate(subWeeks(currentDate, 1))
+  
+  const nextDay = () => setCurrentDate(addDays(currentDate, 1))
+  const prevDay = () => setCurrentDate(subDays(currentDate, 1))
+
   const handleViewChange = (newView, date = currentDate) => {
     setView(newView)
     setCurrentDate(date)
   }
+
+  // Get the appropriate navigation functions based on the current view
+  const getSwipeHandlers = () => {
+    switch(view) {
+      case "month":
+        return { onSwipeLeft: nextMonth, onSwipeRight: prevMonth };
+      case "week":
+        return { onSwipeLeft: nextWeek, onSwipeRight: prevWeek };
+      case "day":
+        return { onSwipeLeft: nextDay, onSwipeRight: prevDay };
+      default:
+        return { onSwipeLeft: nextMonth, onSwipeRight: prevMonth };
+    }
+  }
+  
+  // Initialize swipe gesture handlers
+  const { onSwipeLeft, onSwipeRight } = getSwipeHandlers();
+  const swipeHandlers = useSwipeGesture(onSwipeLeft, onSwipeRight);
 
   const handleDateClick = (date) => {
     setSelectedDate(date)
@@ -247,7 +276,10 @@ export default function Calendar() {
     const days = eachDayOfInterval({ start: startDate, end: endDate })
 
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg h-full flex flex-col">
+      <div 
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg h-full flex flex-col"
+        {...(isMobile ? swipeHandlers : {})}
+      >
         {/* Calendar grid header - days of week */}
         <div className="grid grid-cols-7 gap-px bg-gray-200 dark:bg-gray-700">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
@@ -332,7 +364,10 @@ export default function Calendar() {
     const hours = Array.from({ length: 24 }, (_, i) => i)
 
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg h-full flex flex-col">
+      <div 
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg h-full flex flex-col"
+        {...(isMobile ? swipeHandlers : {})}
+      >
         <div className="grid grid-cols-8 border-b dark:border-gray-700">
           <div className="border-r dark:border-gray-700 p-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400">
             Time
@@ -444,7 +479,10 @@ export default function Calendar() {
     const hours = Array.from({ length: 24 }, (_, i) => i)
 
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg h-full flex flex-col">
+      <div 
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg h-full flex flex-col"
+        {...(isMobile ? swipeHandlers : {})}
+      >
         <div className="grid grid-cols-1 border-b dark:border-gray-700 p-4">
           <div className="text-center">
             <div className="text-lg font-semibold text-gray-900 dark:text-white">{format(currentDate, "EEEE")}</div>

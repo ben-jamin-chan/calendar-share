@@ -1,6 +1,6 @@
 "use client"
 
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route, Navigate,  } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
 import { ThemeProvider } from "./contexts/ThemeContext"
@@ -35,7 +35,7 @@ function App() {
     <AuthProvider>
       <ThemeProvider>
         <SharedCalendarsProvider>
-          <Router>
+          <Router basename="/calendar-share">
             <Toaster
               position="top-right"
               toastOptions={{

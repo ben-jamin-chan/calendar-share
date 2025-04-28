@@ -81,22 +81,29 @@ export default function CalendarHeader({ currentDate, onPrev, onNext, view, onVi
       </div>
 
       {isMobile && (
-        <div className="flex justify-between border-b border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 py-2">
-          {weekDays.map((day, i) => (
-            <div
-              key={i}
-              className={`flex flex-col items-center justify-center w-8 h-8 rounded-full ${
-                format(day, "yyyy-MM-dd") === format(currentDate, "yyyy-MM-dd")
-                  ? "bg-orange-600 text-white"
-                  : "text-gray-700 dark:text-gray-300"
-              }`}
-              onClick={() => onViewChange("day", day)}
-            >
-              <span className="text-xs">{format(day, "EEE")}</span>
-              <span className="text-xs font-semibold">{format(day, "d")}</span>
-            </div>
-          ))}
-        </div>
+        <>
+          <div className="text-xs text-center text-gray-500 dark:text-gray-400 my-1">
+            <span className="inline-flex items-center">
+              <ChevronLeftIcon className="h-3 w-3 mr-1" /> Swipe to navigate <ChevronRightIcon className="h-3 w-3 ml-1" />
+            </span>
+          </div>
+          <div className="flex justify-between border-b border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 py-2">
+            {weekDays.map((day, i) => (
+              <div
+                key={i}
+                className={`flex flex-col items-center justify-center w-8 h-8 rounded-full ${
+                  format(day, "yyyy-MM-dd") === format(currentDate, "yyyy-MM-dd")
+                    ? "bg-orange-600 text-white"
+                    : "text-gray-700 dark:text-gray-300"
+                }`}
+                onClick={() => onViewChange("day", day)}
+              >
+                <span className="text-xs">{format(day, "EEE")}</span>
+                <span className="text-xs font-semibold">{format(day, "d")}</span>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   )
