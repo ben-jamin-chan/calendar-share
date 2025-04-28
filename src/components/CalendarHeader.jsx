@@ -87,7 +87,7 @@ export default function CalendarHeader({ currentDate, onPrev, onNext, view, onVi
               key={i}
               className={`flex flex-col items-center justify-center w-8 h-8 rounded-full ${
                 format(day, "yyyy-MM-dd") === format(currentDate, "yyyy-MM-dd")
-                  ? "bg-purple-600 text-white"
+                  ? "bg-orange-600 text-white"
                   : "text-gray-700 dark:text-gray-300"
               }`}
               onClick={() => onViewChange("day", day)}

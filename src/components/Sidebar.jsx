@@ -85,11 +85,11 @@ export default function Sidebar({
       >
         <div className="flex-1 flex flex-col min-h-0 overflow-y-auto">
           <div className="flex items-center justify-between h-16 flex-shrink-0 px-4 border-b border-gray-200 dark:border-gray-700">
-            <h1 className="text-xl font-bold text-purple-700 dark:text-purple-400">CalendarShare</h1>
+            <h1 className="text-xl font-bold text-orange-700 dark:text-orange-400">CalendarShare</h1>
             {isMobile && (
               <button
                 onClick={() => toggleMobileSidebar(false)}
-                className="p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500"
+                className="p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-orange-500"
               >
                 <XMarkIcon className="h-6 w-6" aria-hidden="true" />
               </button>
@@ -100,7 +100,7 @@ export default function Sidebar({
           <div className="p-4">
             <button
               onClick={handleCreateClick}
-              className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-offset-gray-800"
+              className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 dark:bg-orange-700 dark:hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 dark:focus:ring-offset-gray-800"
             >
               <PlusIcon className="h-5 w-5 mr-2" />
               Create
@@ -116,7 +116,7 @@ export default function Sidebar({
                   to={item.href}
                   className={`${
                     isActive
-                      ? "bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400"
+                      ? "bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400"
                       : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
                   } group flex items-center px-2 py-2 text-sm font-medium rounded-md`}
                   onClick={isMobile ? () => toggleMobileSidebar(false) : undefined}
@@ -124,7 +124,7 @@ export default function Sidebar({
                   <item.icon
                     className={`${
                       isActive
-                        ? "text-purple-600 dark:text-purple-400"
+                        ? "text-orange-600 dark:text-orange-400"
                         : "text-gray-500 dark:text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"
                     } mr-3 flex-shrink-0 h-5 w-5`}
                   />
@@ -162,7 +162,7 @@ export default function Sidebar({
                     <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">No calendars found</div>
                     <button
                       onClick={() => setIsManageCalendarsModalOpen(true)}
-                      className="flex items-center text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300"
+                      className="flex items-center text-sm text-orange-600 dark:text-orange-400 hover:text-orange-800 dark:hover:text-orange-300"
                     >
                       <PlusIcon className="h-4 w-4 mr-1" />
                       Create calendar
@@ -176,7 +176,7 @@ export default function Sidebar({
                         id={`calendar-${calendar.id}`}
                         checked={selectedCalendars.includes(calendar.id)}
                         onChange={() => handleCalendarToggle(calendar)}
-                        className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 dark:border-gray-600 rounded"
+                        className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 dark:border-gray-600 rounded"
                       />
                       <div className="flex items-center ml-2 flex-1">
                         <span className="h-3 w-3 rounded-full mr-2" style={{ backgroundColor: calendar.color }}></span>
@@ -191,7 +191,7 @@ export default function Sidebar({
 
                 <button
                   onClick={() => setIsManageCalendarsModalOpen(true)}
-                  className="flex items-center text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 mt-2"
+                  className="flex items-center text-sm text-orange-600 dark:text-orange-400 hover:text-orange-800 dark:hover:text-orange-300 mt-2"
                 >
                   <PlusIcon className="h-4 w-4 mr-1" />
                   Manage calendars
@@ -235,7 +235,7 @@ export default function Sidebar({
                         id={`shared-calendar-${calendar.id}`}
                         checked={selectedCalendars.includes(calendar.id)}
                         onChange={() => handleCalendarToggle(calendar)}
-                        className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 dark:border-gray-600 rounded"
+                        className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 dark:border-gray-600 rounded"
                       />
                       <div className="flex items-center ml-2 flex-1">
                         <span className="h-3 w-3 rounded-full mr-2" style={{ backgroundColor: calendar.color }}></span>
@@ -254,7 +254,7 @@ export default function Sidebar({
           <div className="p-4 border-t border-gray-200 dark:border-gray-700 mt-auto">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="h-9 w-9 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-600 dark:text-purple-300">
+                <div className="h-9 w-9 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center text-orange-600 dark:text-orange-300">
                   {currentUser?.displayName?.charAt(0) || currentUser?.email?.charAt(0) || "U"}
                 </div>
               </div>

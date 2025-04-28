@@ -160,9 +160,7 @@ export default function CalendarManageModal({
                           <button
                             key={option.value}
                             type="button"
-                            className={`h-6 w-6 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 ${
-                              color === option.value ? "ring-2 ring-offset-2 ring-purple-500" : ""
-                            }`}
+                            className={`h-6 w-6 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 ${color === option.value ? "ring-2 ring-offset-2 ring-orange-500" : ""}`}
                             style={{ backgroundColor: option.value }}
                             onClick={() => setColor(option.value)}
                             title={option.name}
@@ -177,7 +175,7 @@ export default function CalendarManageModal({
                         type="checkbox"
                         checked={isDefault}
                         onChange={(e) => setIsDefault(e.target.checked)}
-                        className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                        className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
                       />
                       <label htmlFor="isDefault" className="ml-2 block text-sm text-gray-900">
                         Set as default calendar

@@ -90,7 +90,7 @@ export default function ShareCalendarModal({ isOpen, onClose, calendar }) {
           <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
             <button
               type="button"
-              className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+              className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
               onClick={onClose}
             >
               <span className="sr-only">Close</span>
@@ -119,12 +119,12 @@ export default function ShareCalendarModal({ isOpen, onClose, calendar }) {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter email address"
-                      className="flex-1 rounded-l-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                      className="flex-1 rounded-l-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
                     />
                     <button
                       type="submit"
                       disabled={loading}
-                      className="inline-flex items-center px-3 py-2 border border-l-0 border-transparent rounded-r-md bg-purple-600 text-white shadow-sm hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="inline-flex items-center px-3 py-2 border border-l-0 border-transparent rounded-r-md bg-orange-600 text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <UserPlusIcon className="h-4 w-4 mr-1" />
                       Share

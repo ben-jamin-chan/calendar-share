@@ -127,13 +127,13 @@ export default function SharedCalendars() {
 
             {loading || sharedCalendarsLoading ? (
               <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-purple-600 dark:border-purple-400 mx-auto"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-orange-600 dark:border-orange-400 mx-auto"></div>
                 <p className="mt-4 text-gray-600 dark:text-gray-400">Loading shared calendars...</p>
               </div>
             ) : sharedCalendars.length === 0 ? (
               <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 text-center">
-                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-purple-100 dark:bg-purple-900/30">
-                  <CalendarIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" aria-hidden="true" />
+                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-orange-100 dark:bg-orange-900/30">
+                  <CalendarIcon className="h-6 w-6 text-orange-600 dark:text-orange-400" aria-hidden="true" />
                 </div>
                 <h3 className="mt-3 text-lg font-medium text-gray-900 dark:text-white">No shared calendars found</h3>
                 <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
@@ -169,7 +169,7 @@ export default function SharedCalendars() {
                             </div>
                             <button
                               onClick={() => handleCreateEvent(calendar.id)}
-                              className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-900/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-offset-gray-900"
+                              className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-orange-700 dark:text-orange-300 bg-orange-100 dark:bg-orange-900/30 hover:bg-orange-200 dark:hover:bg-orange-900/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 dark:focus:ring-offset-gray-900"
                             >
                               <PencilIcon className="h-4 w-4 mr-1" />
                               Add Event
@@ -206,12 +206,12 @@ export default function SharedCalendars() {
                                   className="w-3 h-3 rounded-full mr-3"
                                   style={{ backgroundColor: event.color || "#6366f1" }}
                                 ></div>
-                                <p className="text-sm font-medium text-purple-600 dark:text-purple-400 truncate">
+                                <p className="text-sm font-medium text-orange-600 dark:text-orange-400 truncate">
                                   {event.title}
                                 </p>
                               </div>
                               <div className="ml-2 flex-shrink-0 flex">
-                                <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300">
+                                <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300">
                                   {sharedCalendars.find((cal) => cal.id === event.calendarId)?.name ||
                                     "Shared Calendar"}
                                 </p>
@@ -244,8 +244,8 @@ export default function SharedCalendars() {
                   </div>
                 ) : (
                   <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 text-center">
-                    <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-purple-100 dark:bg-purple-900/30">
-                      <CalendarIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" aria-hidden="true" />
+                    <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-orange-100 dark:bg-orange-900/30">
+                      <CalendarIcon className="h-6 w-6 text-orange-600 dark:text-orange-400" aria-hidden="true" />
                     </div>
                     <h3 className="mt-3 text-lg font-medium text-gray-900 dark:text-white">
                       No events in shared calendars
@@ -262,7 +262,7 @@ export default function SharedCalendars() {
           {/* Floating action button */}
           <button
             onClick={navigateToCalendar}
-            className="fixed right-4 bottom-16 sm:bottom-6 p-3 rounded-full bg-purple-600 dark:bg-purple-700 text-white shadow-lg hover:bg-purple-700 dark:hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 z-20"
+            className="fixed right-4 bottom-16 sm:bottom-6 p-3 rounded-full bg-orange-600 dark:bg-orange-700 text-white shadow-lg hover:bg-orange-700 dark:hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 z-20"
             aria-label="Add new event"
           >
             <PlusIcon className="h-6 w-6" />

@@ -137,7 +137,7 @@ export default function ManageCalendarsModal({
                             <button
                               type="button"
                               onClick={() => handleManageCalendar(calendar)}
-                              className="text-sm text-purple-600 hover:text-purple-800"
+                              className="text-sm text-orange-600 hover:text-orange-800"
                             >
                               Manage
                             </button>

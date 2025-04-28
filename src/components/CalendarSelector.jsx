@@ -143,17 +143,17 @@ export default function CalendarSelector() {
   if (userCalendars.length === 0) {
     return (
       <div className="px-3 py-4">
-        <div className="bg-purple-50 rounded-lg p-4 mb-4 text-center">
-          <CalendarIcon className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-          <h3 className="text-sm font-medium text-purple-800 mb-1">Create Your First Calendar</h3>
-          <p className="text-xs text-purple-700 mb-4">You need to create a calendar before adding events</p>
+        <div className="bg-orange-50 rounded-lg p-4 mb-4 text-center">
+          <CalendarIcon className="h-8 w-8 text-orange-600 mx-auto mb-2" />
+          <h3 className="text-sm font-medium text-orange-800 mb-1">Create Your First Calendar</h3>
+          <p className="text-xs text-orange-700 mb-4">You need to create a calendar before adding events</p>
           
           <input
             type="text"
             value={newCalendarName}
             onChange={(e) => setNewCalendarName(e.target.value)}
             placeholder="Calendar name"
-            className="w-full p-2 text-sm border rounded mb-3 focus:border-purple-500 focus:ring-purple-500"
+            className="w-full p-2 text-sm border rounded mb-3 focus:border-orange-500 focus:ring-orange-500"
             autoFocus
           />
           
@@ -164,7 +164,7 @@ export default function CalendarSelector() {
                 <button
                   key={color}
                   onClick={() => setNewCalendarColor(color)}
-                  className={`w-5 h-5 rounded-full ${newCalendarColor === color ? 'ring-2 ring-offset-1 ring-purple-500' : ''}`}
+                  className={`w-5 h-5 rounded-full ${newCalendarColor === color ? 'ring-2 ring-offset-1 ring-orange-500' : ''}`}
                   style={{ backgroundColor: color }}
                 ></button>
               ))}
@@ -173,7 +173,7 @@ export default function CalendarSelector() {
           
           <button
             onClick={handleCreateCalendar}
-            className="w-full px-3 py-2 text-sm bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+            className="w-full px-3 py-2 text-sm bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
           >
             Create Calendar
           </button>
@@ -188,7 +188,7 @@ export default function CalendarSelector() {
         <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">My Calendars</h2>
         <button
           onClick={() => setIsCreating(true)}
-          className="text-gray-500 hover:text-purple-600"
+          className="text-gray-500 hover:text-orange-600"
           title="Add Calendar"
         >
           <PlusIcon className="h-4 w-4" />
@@ -202,7 +202,7 @@ export default function CalendarSelector() {
             value={newCalendarName}
             onChange={(e) => setNewCalendarName(e.target.value)}
             placeholder="Calendar name"
-            className="w-full p-2 text-sm border rounded mb-2 focus:border-purple-500 focus:ring-purple-500"
+            className="w-full p-2 text-sm border rounded mb-2 focus:border-orange-500 focus:ring-orange-500"
             autoFocus
           />
           <div className="flex items-center mb-2">
@@ -212,7 +212,7 @@ export default function CalendarSelector() {
                 <button
                   key={color}
                   onClick={() => setNewCalendarColor(color)}
-                  className={`w-5 h-5 rounded-full ${newCalendarColor === color ? 'ring-2 ring-offset-1 ring-purple-500' : ''}`}
+                  className={`w-5 h-5 rounded-full ${newCalendarColor === color ? 'ring-2 ring-offset-1 ring-orange-500' : ''}`}
                   style={{ backgroundColor: color }}
                 ></button>
               ))}
@@ -227,7 +227,7 @@ export default function CalendarSelector() {
             </button>
             <button
               onClick={handleCreateCalendar}
-              className="px-3 py-1 text-xs bg-purple-600 text-white rounded hover:bg-purple-700"
+              className="px-3 py-1 text-xs bg-orange-600 text-white rounded hover:bg-orange-700"
             >
               Create
             </button>
@@ -253,7 +253,7 @@ export default function CalendarSelector() {
                       <button
                         key={color}
                         onClick={() => setIsEditing({...isEditing, color})}
-                        className={`w-4 h-4 rounded-full ${isEditing.color === color ? 'ring-2 ring-offset-1 ring-purple-500' : ''}`}
+                        className={`w-4 h-4 rounded-full ${isEditing.color === color ? 'ring-2 ring-offset-1 ring-orange-500' : ''}`}
                         style={{ backgroundColor: color }}
                       ></button>
                     ))}
@@ -268,7 +268,7 @@ export default function CalendarSelector() {
                   </button>
                   <button
                     onClick={() => handleUpdateCalendar(calendar.id)}
-                    className="px-2 py-1 text-xs bg-purple-600 text-white rounded"
+                    className="px-2 py-1 text-xs bg-orange-600 text-white rounded"
                   >
                     Save
                   </button>
@@ -277,7 +277,7 @@ export default function CalendarSelector() {
             ) : (
               <div 
                 className={`flex items-center justify-between p-2 text-sm rounded-md cursor-pointer ${
-                  selectedCalendarId === calendar.id ? 'bg-purple-100' : 'hover:bg-gray-100'
+                  selectedCalendarId === calendar.id ? 'bg-orange-100' : 'hover:bg-gray-100'
                 }`}
               >
                 <div 
@@ -299,14 +299,14 @@ export default function CalendarSelector() {
                   <div className="flex space-x-1 ml-2">
                     <button
                       onClick={() => startSharing(calendar.id)}
-                      className="text-gray-400 hover:text-purple-600"
+                      className="text-gray-400 hover:text-orange-600"
                       title="Share Calendar"
                     >
                       <ShareIcon className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => startEditing(calendar)}
-                      className="text-gray-400 hover:text-purple-600"
+                      className="text-gray-400 hover:text-orange-600"
                       title="Edit Calendar"
                     >
                       <PencilIcon className="h-4 w-4" />
@@ -350,7 +350,7 @@ export default function CalendarSelector() {
               </button>
               <button
                 onClick={handleShareCalendar}
-                className="px-3 py-2 text-sm bg-purple-600 text-white rounded"
+                className="px-3 py-2 text-sm bg-orange-600 text-white rounded"
               >
                 Share
               </button>

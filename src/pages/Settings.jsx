@@ -109,7 +109,7 @@ export default function Settings() {
                       id="name"
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
-                      className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                      className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
                     />
                   </div>
 
@@ -117,7 +117,7 @@ export default function Settings() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-purple-600 dark:bg-purple-700 hover:bg-purple-700 dark:hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 dark:bg-orange-700 hover:bg-orange-700 dark:hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 dark:focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {loading ? "Saving..." : "Save changes"}
                     </button>
@@ -144,7 +144,7 @@ export default function Settings() {
                         type="checkbox"
                         checked={notificationsEnabled}
                         onChange={(e) => setNotificationsEnabled(e.target.checked)}
-                        className="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 dark:border-gray-600 rounded"
+                        className="focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300 dark:border-gray-600 rounded"
                       />
                     </div>
                     <div className="ml-3 text-sm">
@@ -165,7 +165,7 @@ export default function Settings() {
                         type="checkbox"
                         checked={emailNotifications}
                         onChange={(e) => setEmailNotifications(e.target.checked)}
-                        className="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 dark:border-gray-600 rounded"
+                        className="focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300 dark:border-gray-600 rounded"
                       />
                     </div>
                     <div className="ml-3 text-sm">
@@ -188,7 +188,7 @@ export default function Settings() {
                             name="event-reminders"
                             type="checkbox"
                             defaultChecked={true}
-                            className="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 dark:border-gray-600 rounded"
+                            className="focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300 dark:border-gray-600 rounded"
                           />
                         </div>
                         <div className="ml-3 text-sm">
@@ -204,7 +204,7 @@ export default function Settings() {
                             name="shared-calendars"
                             type="checkbox"
                             defaultChecked={true}
-                            className="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 dark:border-gray-600 rounded"
+                            className="focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300 dark:border-gray-600 rounded"
                           />
                         </div>
                         <div className="ml-3 text-sm">
@@ -220,7 +220,7 @@ export default function Settings() {
                             name="new-events"
                             type="checkbox"
                             defaultChecked={true}
-                            className="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 dark:border-gray-600 rounded"
+                            className="focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300 dark:border-gray-600 rounded"
                           />
                         </div>
                         <div className="ml-3 text-sm">
@@ -235,7 +235,7 @@ export default function Settings() {
                   <div className="pt-5">
                     <button
                       type="button"
-                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-purple-600 dark:bg-purple-700 hover:bg-purple-700 dark:hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-offset-gray-900"
+                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 dark:bg-orange-700 hover:bg-orange-700 dark:hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 dark:focus:ring-offset-gray-900"
                     >
                       Save notification settings
                     </button>

@@ -42,7 +42,7 @@ export default function CalendarList({ onCalendarToggle, onCreateCalendar, selec
     return (
       <div className="py-2 px-1">
         <div className="text-sm text-gray-500 mb-2">No calendars found</div>
-        <button onClick={onCreateCalendar} className="flex items-center text-sm text-purple-600 hover:text-purple-800">
+        <button onClick={onCreateCalendar} className="flex items-center text-sm text-orange-600 hover:text-orange-800">
           <PlusIcon className="h-4 w-4 mr-1" />
           Create calendar
         </button>
@@ -59,7 +59,7 @@ export default function CalendarList({ onCalendarToggle, onCreateCalendar, selec
             id={`calendar-${calendar.id}`}
             checked={selectedCalendars.includes(calendar.id)}
             onChange={() => onCalendarToggle(calendar)}
-            className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+            className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
           />
           <div className="flex items-center ml-2 flex-1">
             <span className="h-3 w-3 rounded-full mr-2" style={{ backgroundColor: calendar.color }}></span>
@@ -70,7 +70,7 @@ export default function CalendarList({ onCalendarToggle, onCreateCalendar, selec
       ))}
       <button
         onClick={onCreateCalendar}
-        className="flex items-center text-sm text-purple-600 hover:text-purple-800 mt-2"
+        className="flex items-center text-sm text-orange-600 hover:text-orange-800 mt-2"
       >
         <PlusIcon className="h-4 w-4 mr-1" />
         Create calendar

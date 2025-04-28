@@ -281,7 +281,7 @@ export default function Calendar() {
                   <div
                     className={`font-medium text-sm ${
                       isToday 
-                        ? "h-6 w-6 rounded-full bg-purple-600 text-white flex items-center justify-center" 
+                        ? "h-6 w-6 rounded-full bg-orange-600 text-white flex items-center justify-center" 
                         : ""
                     }`}
                   >
@@ -289,7 +289,7 @@ export default function Calendar() {
                   </div>
                   
                   {dayEvents.length > 0 && isMobile && (
-                    <div className="text-xs text-purple-600 dark:text-purple-400 font-medium">
+                    <div className="text-xs text-orange-600 dark:text-orange-400 font-medium">
                       {dayEvents.length}
                     </div>
                   )}
@@ -340,11 +340,11 @@ export default function Calendar() {
           {days.map((day) => (
             <div
               key={day.toString()}
-              className={`p-3 text-center font-medium ${isSameDay(day, new Date()) ? "bg-purple-50 dark:bg-purple-900/30" : ""}`}
+              className={`p-3 text-center font-medium ${isSameDay(day, new Date()) ? "bg-orange-50 dark:bg-orange-900/30" : ""}`}
             >
               <div className="text-gray-500 dark:text-gray-400">{format(day, "EEE")}</div>
               <div
-                className={`font-bold text-lg ${isSameDay(day, new Date()) ? "text-purple-600 dark:text-purple-400" : "text-gray-900 dark:text-white"}`}
+                className={`font-bold text-lg ${isSameDay(day, new Date()) ? "text-orange-600 dark:text-orange-400" : "text-gray-900 dark:text-white"}`}
               >
                 {format(day, "d")}
               </div>
@@ -580,7 +580,7 @@ export default function Calendar() {
         {/* Floating action button - adjusted for better mobile visibility */}
         <button
           onClick={handleCreateEvent}
-          className="fixed right-4 bottom-16 sm:bottom-6 p-3 rounded-full bg-purple-600 dark:bg-purple-700 text-white shadow-lg hover:bg-purple-700 dark:hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 z-20"
+          className="fixed right-4 bottom-16 sm:bottom-6 p-3 rounded-full bg-orange-600 dark:bg-orange-700 text-white shadow-lg hover:bg-orange-700 dark:hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 z-20"
           aria-label="Add new event"
         >
           <PlusIcon className="h-6 w-6" />

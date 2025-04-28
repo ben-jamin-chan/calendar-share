@@ -197,7 +197,7 @@ export default function Navbar({ toggleMobileSidebar }) {
         <div className="flex items-center">
           <button
             type="button"
-            className="md:hidden h-10 w-10 inline-flex items-center justify-center rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500"
+            className="md:hidden h-10 w-10 inline-flex items-center justify-center rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-orange-500"
             onClick={() => toggleMobileSidebar(true)}
           >
             <span className="sr-only">Toggle sidebar</span>
@@ -205,7 +205,7 @@ export default function Navbar({ toggleMobileSidebar }) {
           </button>
           <Link to={"/"}>
             <div className="hidden md:flex md:items-center md:ml-2">
-              <h1 className="text-xl font-bold text-purple-700 dark:text-purple-400">Calendar-Share</h1>
+              <h1 className="text-xl font-bold text-orange-700 dark:text-orange-400">Calendar-Share</h1>
             </div>
           </Link>
         </div>
@@ -223,7 +223,7 @@ export default function Navbar({ toggleMobileSidebar }) {
               value={searchQuery}
               onChange={handleSearch}
               onFocus={() => searchQuery.trim().length >= 2 && setShowResults(true)}
-              className="block w-full rounded-md border-0 py-1.5 pl-10 pr-8 text-gray-900 dark:text-white bg-white dark:bg-gray-700 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
+              className="block w-full rounded-md border-0 py-1.5 pl-10 pr-8 text-gray-900 dark:text-white bg-white dark:bg-gray-700 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6"
               placeholder="Search for events"
             />
             {searchQuery && (
@@ -240,7 +240,7 @@ export default function Navbar({ toggleMobileSidebar }) {
               <div className="absolute mt-1 w-full bg-white dark:bg-gray-800 rounded-md shadow-lg max-h-96 overflow-y-auto z-50 border border-gray-200 dark:border-gray-700">
                 {isSearching ? (
                   <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
-                    <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-purple-600 dark:border-purple-400 mx-auto"></div>
+                    <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-orange-600 dark:border-orange-400 mx-auto"></div>
                     <p className="mt-1">Searching...</p>
                   </div>
                 ) : searchResults.length === 0 ? (
@@ -289,7 +289,7 @@ export default function Navbar({ toggleMobileSidebar }) {
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
-            className="rounded-full p-1 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="rounded-full p-1 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
           >
             {theme === "dark" ? (
@@ -303,12 +303,12 @@ export default function Navbar({ toggleMobileSidebar }) {
 
           <Menu as="div" className="relative">
             <div>
-              <Menu.Button className="flex rounded-full bg-white dark:bg-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+              <Menu.Button className="flex rounded-full bg-white dark:bg-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
                 <span className="sr-only">Open user menu</span>
                 {currentUser?.photoURL ? (
                   <img className="h-8 w-8 rounded-full" src={currentUser.photoURL || "/placeholder.svg"} alt="" />
                 ) : (
-                  <div className="h-8 w-8 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-600 dark:text-purple-300">
+                  <div className="h-8 w-8 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center text-orange-600 dark:text-orange-300">
                     {currentUser?.displayName?.charAt(0) || currentUser?.email?.charAt(0) || "U"}
                   </div>
                 )}
