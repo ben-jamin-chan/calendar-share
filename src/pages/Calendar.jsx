@@ -456,11 +456,12 @@ export default function Calendar() {
                         zIndex: 10,
                       }}
                     >
-                      <div className="font-semibold truncate">
+                      {/* truncate */}
+                      <div className="font-semibold ">
                         {isSameDay(day, event.start) ? event.title : `${event.title} (cont.)`}
                       </div>
                       {!isMobile && (
-                        <div className="truncate">
+                        <div className=" ">
                           {isSameDay(day, event.start) ? format(event.start, "h:mm a") : "all day"} -
                           {isSameDay(day, event.end) ? format(event.end, "h:mm a") : ""}
                         </div>
